@@ -1,0 +1,30 @@
+.stroke1 {
+    stroke-dasharray: 1282;
+    animation: write1 8.5s infinite linear;
+}
+
+.stroke2 {
+    stroke-dasharray: 1311;
+    animation: write2 8.5s infinite linear; 
+}
+
+
+
+@keyframes write1 {
+    0% {
+        stroke-dashoffset: 1282;
+    }
+    20% {
+        stroke-dashoffset: 0;
+    }
+}
+ 
+@keyframes write2 {
+    0%, 20%  {
+        stroke-dashoffset: 1311;
+    }
+    40% {
+        stroke-dashoffset: 0;
+    }
+}
+ 

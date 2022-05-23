@@ -1,0 +1,57 @@
+.stroke1 {
+    stroke-dasharray: 270;
+    animation: write1 10s infinite linear;
+}
+
+.stroke2 {
+    stroke-dasharray: 98;
+    animation: write2 10s infinite linear;
+}
+
+.stroke3 {
+    stroke-dasharray: 418;
+    animation: write3 10s infinite linear;
+}
+
+.stroke4 {
+    stroke-dasharray: 233;
+    animation: write4 10s infinite linear;
+}
+
+
+
+@keyframes write1 {
+    0% {
+        stroke-dashoffset: 270;
+    }
+    12.5% {
+        stroke-dashoffset: 0;
+    }
+}
+ 
+@keyframes write2 {
+    0%, 12.5%  {
+        stroke-dashoffset: 98;
+    }
+    20% {
+        stroke-dashoffset: 0;
+    }
+}
+ 
+@keyframes write3 {
+    0%, 20% {
+        stroke-dashoffset: 418;
+    }
+    40% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes write4 {
+    0%, 40% {
+        stroke-dashoffset: 233;
+    }
+    50% {
+        stroke-dashoffset: 0;
+    }
+}

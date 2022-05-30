@@ -9,12 +9,14 @@ const awards = {
         {
             year: '2021',
             comp: 'INTI e-workshop EDA Circuit Design',
-            title: '3rd Prize'
+            title: '3rd Prize',
+            link: ''
         },
         {
             year: '2021',
             comp: 'INTI e-workshop Programming Maze Challenge',
-            title: '1st Prize'
+            title: '1st Prize',
+            link: ''
         }
     ],
     "2020":[
@@ -26,11 +28,13 @@ const awards = {
         },{
             year: '2020',
             comp: 'CEC Young Engineers 100 Day Makerthon',
-            title: 'Silver Award, Best Advertisment'
+            title: 'Silver Award, Best Advertisment',
+            link: ''
         },{
             year: '2020',
             comp: 'English Online Interclass Debate 2020',
-            title: '2nd Prize'
+            title: '2nd Prize',
+            link: ''
         }
     ],
     "2019":[
@@ -52,38 +56,46 @@ const awards = {
         },{
             year: '2019',
             comp: 'UBTECH Robotics Competition Smart Factory',
-            title: '2nd Prize'
+            title: '2nd Prize',
+            link: ''
         },{
             year: '2019',
             comp: 'State Award for Excellence in Extra Curricular Actvites',
-            title: 'Gold Award'
+            title: 'Gold Award',
+            link: ''
         },{
             year: '2019',
             comp: 'STEAM Science Fair',
-            title: 'Merit Prize'
+            title: 'Merit Prize',
+            link: ''
         },{
             year: '2019',
             comp: 'School\'s Club Performance Award',
-            title: 'Gold Award'
+            title: 'Gold Award',
+            link: ''
         },{
             year: '2019',
             comp: 'School\'s Club Performance Report',
-            title: 'Best Slides Design'
+            title: 'Best Slides Design',
+            link: ''
         }
     ],
     "2017":[
         {
             year: '2017',
             comp: 'MISCC Robotic Workshop and Competition 2017',
-            title: 'Excellence Award'
+            title: 'Excellence Award',
+            link: ''
         },{
             year: '2017',
             comp: 'Choral Speaking Competition',
-            title: 'Excellence Award'
+            title: 'Excellence Award',
+            link: ''
         },{
             year: '2017',
             comp: '13th Annual Interclass Performing Arts Competition',
-            title: 'Silver Award'
+            title: 'Silver Award',
+            link: ''
         }
     ],
     "2016":[
@@ -91,7 +103,7 @@ const awards = {
             year: '2016',
             comp: 'The Second ASEAN Student Science Project Competiton (ASPC 2016)',
             title: '1st Prize',
-            link: 'https://www.nsm.or.th/en/nsm-activities/competitions/asean-student-science-project-competition-aspc.html'
+            link: 'https://www.nsm.or.th/nsm/en/node/8039'
         },{
             year: '2016',
             comp: 'ACCCIM STI Competition',
@@ -105,11 +117,13 @@ const awards = {
         },{
             year: '2016',
             comp: '12th Annual Interclass Performing Arts Competition',
-            title: 'Silver Award'
+            title: 'Silver Award',
+            link: ''
         },{
             year: '2016',
             comp: 'Annual Hill Cimbing Competition',
-            title: '20th Place'
+            title: '20th Place',
+            link: ''
         }
     ]
 };
@@ -126,7 +140,7 @@ function AwardList() {
                         <p className="py-3 text-5xl text-blue-600">{year}</p>
                             <ul className="list-disc text-2xl px-4 lg:px-[7.5rem] p-3" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
                                 {awards[year].map((award) => 
-                                    (award.link !== undefined) ? 
+                                    (award.link !== '') ? 
                                     <><li><a href={award.link} className='hover:text-blue-600 cursor-pointer'>{award.comp}</a></li><p className="text-xl"> - {award.title}</p></> :
                                     <><li>{award.comp}</li><p className="text-xl"> - {award.title}</p></>
                                 )}

@@ -14,8 +14,8 @@ function test() {
                         <li className='py-0.5 text-slate-700'><Link href="/" className='hover:underline'>Home</Link></li>
                         <li className='py-0.5 text-slate-700'><Link href="/woah" className='hover:underline'>Woah</Link></li>
                         <li className='py-0.5 text-slate-700'><Link href="/awards" className='hover:underline'>Awards</Link></li>
-                        <li className='py-0.5 text-slate-700'><Link href="" className='hover:underline'>Amet</Link></li>
-                        <li className='py-0.5 text-slate-700'><Link href="" className='hover:underline'>Consectetur</Link></li>
+                        <li className='py-0.5 text-slate-700'><Link href="/" className='hover:underline'>Amet</Link></li>
+                        <li className='py-0.5 text-slate-700'><Link href="/" className='hover:underline'>Consectetur</Link></li>
                     </ul>
                     <div className='flex flex-col'>
                         <div className='grow'></div>

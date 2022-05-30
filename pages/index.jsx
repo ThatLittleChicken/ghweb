@@ -13,6 +13,8 @@ export default function Home() {
         <title>HELLO</title>
         <link rel="icon" href="./favicon.ico" />
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
+        <meta charset="UTF-8"/>
+        <meta name="description" content="Hello there, this is just a simple portfolio about me!"/>
       </Head>
 
       <Navbar/>

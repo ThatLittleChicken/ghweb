@@ -3,3 +3,4 @@
 [Live Page](https://genthoong.tk)
 
 This project uses Next.js and Tailwindcss updated to `v12.1.6` and `v3.0.24` repectively as of *23 June 2022*.
+Hosted with firebase `v11.0.1`, id:`ghweb-f209d`.

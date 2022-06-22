@@ -14,7 +14,8 @@ export default function Home() {
         <link rel="icon" href="./favicon.ico" />
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
         <meta charset="UTF-8"/>
-        <meta name="description" content="Hello there, this is just a simple portfolio about me!"/>
+        <meta name="description" content="Hello there, this is just a simple about me!"/>
+        <meta name="keywords" content='Gent, Gent Hoong, Yong Gent Hoong'></meta>
       </Head>
 
       <Navbar/>

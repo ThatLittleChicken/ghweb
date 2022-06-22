@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Head>
-        <title>HELLO</title>
+        <title>Hello!</title>
         <link rel="icon" href="./favicon.ico" />
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
         <meta charset="UTF-8"/>

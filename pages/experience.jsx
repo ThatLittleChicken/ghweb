@@ -5,7 +5,7 @@ export default function Experience() {
   return (
     <main className="page">
       <Head>
-        <title>Experience — Gent Yong</title>
+        <title>Experience | Gent Yong</title>
       </Head>
       <h1 className="title">Work<span className="acc">.</span></h1>
       <p className="lede">Research and web work at BYU, plus a summer in industry. Most recent first.</p>

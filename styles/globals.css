@@ -57,6 +57,8 @@ button { font-family: inherit }
 .bg-deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden }
 .blob1 { position: absolute; top: -20vh; left: -10vw; width: 60vw; height: 60vw; border-radius: 50%; background: var(--blob1); filter: blur(90px); opacity: 0.75; animation: drift1 26s ease-in-out infinite; will-change: transform }
 .blob2 { position: absolute; bottom: -25vh; right: -10vw; width: 55vw; height: 55vw; border-radius: 50%; background: var(--blob2); filter: blur(100px); opacity: 0.7; animation: drift2 32s ease-in-out infinite; will-change: transform }
+[data-theme="dark"] .blob1 { opacity: 0.25 }
+[data-theme="dark"] .blob2 { opacity: 0.2 }
 .dots { position: absolute; inset: 0; background-image: radial-gradient(var(--line) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.55; -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%); mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%) }
 .scene-wrap { position: absolute; top: 0; left: 0; right: 0; height: min(100vh, 900px); animation: sceneIn 2.4s 0.3s ease-out both }
 
@@ -96,7 +98,9 @@ button { font-family: inherit }
 .hero { position: relative; z-index: 1; width: 100%; min-height: min(72vh, 720px); display: flex; align-items: center }
 .hero-col { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; width: min(100%, 560px) }
 .name { margin: 0; display: flex; flex-wrap: wrap; justify-content: flex-start; font-size: clamp(40px, 9vw, 84px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; font-family: Newsreader, serif; animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) both }
-.name span { display: inline-block; white-space: pre; cursor: default; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) }
+/* letters are eased by a rAF loop in pages/index.jsx — a CSS transition here
+   would restart on every pointer move and fight it */
+.name span { display: inline-block; white-space: pre; cursor: default; will-change: transform }
 .intro { position: relative; max-width: 520px; margin: 26px 0 0; font-size: clamp(16px, 1.6vw, 18px); line-height: 1.55; color: var(--mute); text-wrap: pretty }
 .intro b { font-weight: 600 }
 .intro .ghost { visibility: hidden }
@@ -130,26 +134,26 @@ button { font-family: inherit }
 /* education */
 .edu-degree { font-size: clamp(20px, 2.2vw, 24px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.2 }
 .edu-school { margin-top: 4px; font-size: 16px; color: var(--mute) }
-.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 26px }
-.stat-card { padding: 18px 20px; border-radius: 16px; background: var(--card); border: 1px solid var(--line) }
+.edu-school b { font-weight: 600; color: var(--fg) }
+/* GPA card hugs its content; honors card takes the remaining width */
+.stat-grid { display: grid; grid-template-columns: minmax(160px, auto) minmax(min(100%, 220px), 1fr); gap: 14px; margin-top: 26px }
+@media (max-width: 480px) { .stat-grid { grid-template-columns: 1fr } }
+.stat-card { padding: 18px 20px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column }
+.stat-card .stat-big { margin: auto 0 } /* centers the number in the card's leftover height */
 .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--mute); margin-bottom: 8px }
-.stat-big { font-size: 30px; font-weight: 500; letter-spacing: -0.03em; font-family: Newsreader, serif }
+.stat-big { font-size: 38px; font-weight: 500; letter-spacing: -0.03em; font-family: Newsreader, serif }
 .stat-text { font-size: 15px; line-height: 1.5 }
+/* wraps to a new line as a unit; only breaks internally if wider than the card */
+.stat-text .term { display: inline-block }
 .chips { display: flex; flex-wrap: wrap; gap: 8px }
 .chip { font-size: 14px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); transition: border-color 0.25s, color 0.25s }
 .chip:hover { border-color: var(--acc); color: var(--acc) }
 .skills { display: flex; flex-direction: column; gap: 14px; font-size: 15px; line-height: 1.55 }
 .skills .label { color: var(--mute) }
 
-/* projects */
-.proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px }
-.proj-card { display: flex; flex-direction: column; gap: 16px; padding: 28px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); min-height: 260px; color: inherit; animation: rise 0.7s both; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s, border-color 0.3s }
-.proj-card:hover { transform: translateY(-5px); box-shadow: 0 30px 50px -30px rgba(0, 0, 0, 0.35); border-color: var(--acc); color: inherit }
-.tags { display: flex; flex-wrap: wrap; gap: 6px }
-.tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--mute) }
-.proj-title { margin-top: auto; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15 }
-.proj-desc { font-size: 15px; line-height: 1.5; color: var(--mute) }
-.proj-cta { font-size: 14px; color: var(--acc); font-weight: 600 }
+/* projects — tech stack pills under each description */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px }
+.tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--mute) }
 
 /* awards */
 .award-rows { display: flex; flex-direction: column; gap: 8px }
@@ -163,7 +167,6 @@ button { font-family: inherit }
 
 /* writing */
 .writing-row { display: grid; grid-template-columns: minmax(90px, 160px) minmax(0, 1fr); gap: 8px 32px; padding: 28px 0; border-top: 1px solid var(--line); color: inherit; animation: rise 0.7s both }
-a.writing-row:hover { color: var(--acc) }
 .writing-title { font-size: clamp(18px, 2vw, 22px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; text-wrap: pretty }
 .writing-sub { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--mute) }
 .writing-end { border-bottom: 1px solid var(--line) }
@@ -197,3 +200,16 @@ a.writing-row:hover { color: var(--acc) }
   .door-label { font-size: 20px; margin-top: 0 }
   .door-sub { grid-column: 1 / -1; font-size: 14px }
 }
+
+/* ---------- merged projects/writing section heading ---------- */
+.section-h { margin: 72px 0 24px; font-size: clamp(28px, 3.5vw, 40px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; font-family: Newsreader, serif; animation: rise 0.7s both }
+.section-h .acc { color: var(--acc) }
+
+/* ---------- interests photo stack ---------- */
+.stack-wrap { display: flex; flex-direction: column; gap: 14px; align-items: flex-start }
+.stack { position: relative; width: min(420px, 100%); aspect-ratio: 4 / 3; border: none; background: none; padding: 0; margin: 10px 0 24px; cursor: pointer; -webkit-tap-highlight-color: transparent }
+.photo { position: absolute; inset: 0; margin: 0; background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 10px 10px 44px; box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.35); transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); box-sizing: border-box; will-change: transform }
+[data-theme="dark"] .photo { background: #1a1c20 }
+.photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block }
+.photo figcaption { position: absolute; left: 14px; right: 14px; bottom: 13px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--mute); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.stack-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--mute) }

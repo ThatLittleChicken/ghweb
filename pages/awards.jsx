@@ -5,11 +5,11 @@ export default function Awards() {
   return (
     <main className="page">
       <Head>
-        <title>Awards — Gent Yong</title>
+        <title>Awards | Gent Yong</title>
       </Head>
       <h1 className="title">Won<span className="acc">.</span></h1>
       <p className="lede lede-wide">
-        Awards from school and mostly external competitions during high school, through hard work and determination.
+        Awards archived from school and mostly external competitions <b><u>before starting university</u></b>.
       </p>
       <div className="award-rows">
         {AWARD_YEARS.map((y, i) => (

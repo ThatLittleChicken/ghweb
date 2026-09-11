@@ -15,13 +15,14 @@ const firebaseConfig = {
 
 
 export default function initFirebase() {
-  if (!firebase.apps.length) {
+  if (firebase.apps.length || !firebaseConfig.projectId) return
+  try {
     firebase.initializeApp(firebaseConfig)
-    if (typeof window !== 'undefined') {
-      if('measurementId' in firebaseConfig) {
-        firebase.analytics()
-      }
+    if (typeof window !== 'undefined' && firebaseConfig.measurementId) {
+      firebase.analytics()
     }
-    console.log('Firebase init success')
+  } catch (e) {
+    // analytics is best-effort; never take the site down over it
+    console.warn('Firebase init failed', e)
   }
 }

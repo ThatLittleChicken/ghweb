@@ -1,13 +1,15 @@
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import { INTEREST_PHOTOS, INTERESTS, stagger } from '../data/content'
 import PhotoStack from '../components/PhotoStack'
 
 export default function Interests() {
   return (
     <main className="page">
-      <Head>
-        <title>Interests | Gent Yong</title>
-      </Head>
+      <Seo
+        title="Interests | Gent Yong"
+        description="Life beyond a computer screen — hiking, climbing, snowboarding, art and classical violin."
+        path="/interests/"
+      />
       <h1 className="title">Enjoys<span className="acc">.</span></h1>
       <p className="lede">Life beyond a computer screen. Click the stack to flip through.</p>
 

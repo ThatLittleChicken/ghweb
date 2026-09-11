@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import { COURSES, LANGUAGES, TECHNOLOGIES } from '../data/content'
 
 export default function Education() {
   return (
     <main className="page">
-      <Head>
-        <title>Education | Gent Yong</title>
-      </Head>
+      <Seo
+        title="Education | Gent Yong"
+        description="BS in Computer Science at Brigham Young University (Dec 2026) with a math minor — 3.98 GPA, honors, coursework and skills."
+        path="/education/"
+      />
       <h1 className="title">Studied<span className="acc">.</span></h1>
       <p className="lede">Brigham Young University, August 2022 to December 2026.</p>
 

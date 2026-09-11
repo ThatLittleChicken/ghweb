@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import { PROJECTS, WRITING, stagger } from '../data/content'
 
 export default function Projects() {
   return (
     <main className="page">
-      <Head>
-        <title>Projects | Gent Yong</title>
-      </Head>
+      <Seo
+        title="Projects | Gent Yong"
+        description="Projects and research by Gent Yong — a serverless ChatGPT wrapper, DQN network rewiring research, a department arcade game — plus papers and talks."
+        path="/projects/"
+      />
       <h1 className="title">Built<span className="acc">.</span></h1>
       <p className="lede">Personal projects with the stack on each. Research papers and presentations below.</p>
       <div className="rows">

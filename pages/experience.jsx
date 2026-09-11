@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import { JOBS, stagger } from '../data/content'
 
 export default function Experience() {
   return (
     <main className="page">
-      <Head>
-        <title>Experience | Gent Yong</title>
-      </Head>
+      <Seo
+        title="Experience | Gent Yong"
+        description="Research and industry experience of Gent Yong: RL research at BYU labs, an AWS event pipeline internship at Partner.Co, web development and more."
+        path="/experience/"
+      />
       <h1 className="title">Work<span className="acc">.</span></h1>
       <p className="lede">Research and web work at BYU, plus a summer in industry. Most recent first.</p>
       <div className="rows">

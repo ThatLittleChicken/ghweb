@@ -1,12 +1,14 @@
-import Head from 'next/head'
+import Seo from '../components/Seo'
 import { AWARD_YEARS, stagger } from '../data/content'
 
 export default function Awards() {
   return (
     <main className="page">
-      <Head>
-        <title>Awards | Gent Yong</title>
-      </Head>
+      <Seo
+        title="Awards | Gent Yong"
+        description="22 awards from science fairs and competitions, from ASEAN science projects to the Malaysian Computing Challenge, 2016–2021."
+        path="/awards/"
+      />
       <h1 className="title">Won<span className="acc">.</span></h1>
       <p className="lede lede-wide">
         Awards archived from school and mostly external competitions <b><u>before starting university</u></b>.

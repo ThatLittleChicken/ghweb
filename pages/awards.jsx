@@ -1,25 +1,31 @@
 import Head from 'next/head'
-import Footer from '../components/Footer'
-import Navbar from '../components/Navbar'
-import AwardList from '../components/AwardList'
+import { AWARD_YEARS, stagger } from '../data/content'
 
-function awards() {
-    return (
-        <div>
-            <Head>
-                <title>Awards</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <Navbar/>
-
-            <main className='m-5 lg:m-12'>
-                <h1 className='text-center text-6xl p-3'>List of Awards</h1>
-                <h2 className='text-center text-xl p-4'>Here are awards I've won in school and mostly external competitions <span className='font-bold'>during High School</span> through hardwork and determination.</h2>
-                <AwardList/>
-            </main>
-            <Footer/>
-        </div>
-    )
+export default function Awards() {
+  return (
+    <main className="page">
+      <Head>
+        <title>Awards — Gent Yong</title>
+      </Head>
+      <h1 className="title">Won<span className="acc">.</span></h1>
+      <p className="lede lede-wide">
+        Awards from school and mostly external competitions during high school, through hard work and determination.
+      </p>
+      <div className="award-rows">
+        {AWARD_YEARS.map((y, i) => (
+          <div className="award-row" key={y.year} style={{ animationDelay: stagger(i) }}>
+            <div className="award-year">{y.year}</div>
+            <div className="award-items">
+              {y.items.map(([name, prize]) => (
+                <div className="award-item" key={name}>
+                  <span className="award-name">{name}</span>
+                  <span className="award-prize">{prize}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+  )
 }
-
-export default awards

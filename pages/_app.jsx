@@ -11,10 +11,26 @@ export default function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
   const [fading, setFading] = useState(false)
 
-  // theme is set on <html> before paint by the inline script in _document;
-  // sync React state to it after mount
+  // theme is set on <html> before paint by the inline script in _document
+  // (stored choice, else system preference); sync React state to it, and
+  // follow live system changes until the user picks a theme explicitly
   useEffect(() => {
     if (document.documentElement.getAttribute('data-theme') === 'dark') setTheme('dark')
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const onChange = (e) => {
+      let stored = null
+      try { stored = localStorage.getItem('theme') } catch (err) { /* private mode */ }
+      if (stored === 'dark' || stored === 'light') return
+      const next = e.matches ? 'dark' : 'light'
+      setTheme(next)
+      document.documentElement.setAttribute('data-theme', next)
+    }
+    if (mq.addEventListener) mq.addEventListener('change', onChange)
+    else mq.addListener(onChange)
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', onChange)
+      else mq.removeListener(onChange)
+    }
   }, [])
 
   const toggleTheme = () => {

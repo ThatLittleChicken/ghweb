@@ -1,7 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-// apply the persisted theme before first paint to avoid a flash
-const themeInit = `(function(){var t='light';try{var s=localStorage.getItem('theme');if(s==='dark'||s==='light')t=s}catch(e){}document.documentElement.setAttribute('data-theme',t)})()`
+// apply the persisted theme (falling back to the system preference) before
+// first paint to avoid a flash
+const themeInit = `(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='dark'&&t!=='light'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()`
 
 class MyDocument extends Document {
   render() {

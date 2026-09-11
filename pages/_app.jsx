@@ -24,14 +24,19 @@ export default function MyApp({ Component, pageProps }) {
     try { localStorage.setItem('theme', next) } catch (e) { /* private mode */ }
   }
 
-  // loader: dismiss when the document is loaded and (on home) the office
-  // canvas exists — minimum 1.2s, maximum 6s on screen
+  // loader: dismiss only once everything that renders is actually ready —
+  // document loaded, web fonts active, and (on home) the office scene has
+  // drawn its first frame — minimum 1.2s, maximum 6s on screen
   useEffect(() => {
     const t0 = performance.now()
     const needsScene = window.location.pathname.replace(/\/$/, '') === ''
     let timer
+    let fontsReady = !(document.fonts && document.fonts.ready)
+    if (!fontsReady) document.fonts.ready.then(() => { fontsReady = true })
     const ready = () =>
-      document.readyState === 'complete' && (!needsScene || document.querySelector('office-scene canvas'))
+      document.readyState === 'complete' &&
+      fontsReady &&
+      (!needsScene || document.querySelector('office-scene[data-rendered]'))
     const done = () => {
       const wait = Math.max(0, 1200 - (performance.now() - t0))
       timer = setTimeout(() => {

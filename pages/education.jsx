@@ -5,7 +5,7 @@ export default function Education() {
   return (
     <main className="page">
       <Head>
-        <title>Education — Gent Yong</title>
+        <title>Education | Gent Yong</title>
       </Head>
       <h1 className="title">Studied<span className="acc">.</span></h1>
       <p className="lede">Brigham Young University, August 2022 to December 2026.</p>
@@ -14,7 +14,7 @@ export default function Education() {
         <div className="meta">2022 – 2026</div>
         <div>
           <div className="edu-degree">Bachelor of Science in Computer Science</div>
-          <div className="edu-school">Brigham Young University · Provo, UT · Math minor</div>
+          <div className="edu-school">Brigham Young University · Provo, UT · <i>Math minor</i></div>
           <div className="stat-grid">
             <div className="stat-card">
               <div className="stat-label">GPA</div>
@@ -22,7 +22,20 @@ export default function Education() {
             </div>
             <div className="stat-card">
               <div className="stat-label">Honors</div>
-              <div className="stat-text">Dean&apos;s List · Academic Scholarship · Google Endowed Mentorship Scholarship</div>
+              <div className="stat-text">
+                {[
+                  "Dean's List",
+                  'Academic Scholarship',
+                  'Google Endowed Mentorship Scholarship',
+                  'Elva Clara Wunderli Richardson Memorial Scholarship',
+                  'Larry R. and Janice K. White Scholarship',
+                ].map((h, i) => (
+                  <span key={h}>
+                    {i > 0 && ' · '}
+                    <span className="term">{h}</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>

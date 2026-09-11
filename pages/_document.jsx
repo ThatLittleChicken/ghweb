@@ -1,28 +1,24 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-class MyDocument extends Document {
-    static async getInitialProps(ctx) {
-        const initialProps = await Document.getInitialProps(ctx)
-        return { ...initialProps }
-      }
+// apply the persisted theme before first paint to avoid a flash
+const themeInit = `(function(){var t='light';try{var s=localStorage.getItem('theme');if(s==='dark'||s==='light')t=s}catch(e){}document.documentElement.setAttribute('data-theme',t)})()`
 
+class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
-            href="https://fonts.googleapis.com/css?family=Product+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap"
             rel="stylesheet"
           />
-          <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         </Head>
         <body>
+          <script dangerouslySetInnerHTML={{ __html: themeInit }} />
           <Main />
           <NextScript />
-          <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-          <script>
-            AOS.init();
-          </script>
         </body>
       </Html>
     )

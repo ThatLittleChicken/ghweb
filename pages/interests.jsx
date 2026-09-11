@@ -11,19 +11,15 @@ export default function Interests() {
       <h1 className="title">Enjoys<span className="acc">.</span></h1>
       <p className="lede">Life beyond a computer screen. Click the stack to flip through.</p>
 
-      <div className="row" style={{ animationDelay: stagger(0) }}>
-        <div className="meta">Album</div>
+      <div className="album" style={{ animationDelay: stagger(0) }}>
         <PhotoStack photos={INTEREST_PHOTOS} />
       </div>
 
       {INTERESTS.length > 0 && (
-        <div className="row" style={{ animationDelay: stagger(1) }}>
-          <div className="meta">Into</div>
-          <div className="chips">
-            {INTERESTS.map((it) => (
-              <span className="chip" key={it}>{it}</span>
-            ))}
-          </div>
+        <div className="chips chips-center" style={{ animation: `rise 0.7s ${stagger(1)} both` }}>
+          {INTERESTS.map((it) => (
+            <span className="chip" key={it}>{it}</span>
+          ))}
         </div>
       )}
     </main>

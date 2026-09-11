@@ -214,11 +214,11 @@ export const TECHNOLOGIES =
 
 // photo stack on /interests — drop images in public/photos/ and list them here
 export const INTEREST_PHOTOS = [
-  { src: "/photos/photo-1.svg", caption: "placeholder — swap in public/photos" },
-  { src: "/photos/photo-2.svg", caption: "placeholder — swap in public/photos" },
-  { src: "/photos/photo-3.svg", caption: "placeholder — swap in public/photos" },
-  { src: "/photos/photo-4.svg", caption: "placeholder — swap in public/photos" },
-  { src: "/photos/photo-5.svg", caption: "placeholder — swap in public/photos" },
+  { src: "/photos/hike.jpg", caption: "Love the view after a good hike" },
+  { src: "/photos/climb.jpg", caption: "Always exciting and fun to climb" },
+  { src: "/photos/snow.jpg", caption: "Snowboarding in the winter, hoping for powder" },
+  { src: "/photos/frog.jpg", caption: "Random art when I have time" },
+  { src: "/photos/concert.jpg", caption: "Classical concerts, I play the violin" },
 ];
 
 // personal interests shown as chips on /interests — fill these in

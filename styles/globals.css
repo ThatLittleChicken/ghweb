@@ -61,6 +61,12 @@ button { font-family: inherit }
 [data-theme="dark"] .blob2 { opacity: 0.2 }
 .dots { position: absolute; inset: 0; background-image: radial-gradient(var(--line) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.55; -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%); mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%) }
 .scene-wrap { position: absolute; top: 0; left: 0; right: 0; height: min(100vh, 900px); animation: sceneIn 2.4s 0.3s ease-out both }
+/* the mask's elliptical cutout behind the hero cross-fades in with the text:
+   --cut scales only the gradient's alpha (0 = no cutout, 1 = full cutout),
+   so the scene itself keeps its own timing and nothing moves */
+@property --cut { syntax: '<number>'; inherits: true; initial-value: 1; }
+.scene-wrap { --cut: 1; transition: --cut 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) }
+.hold .scene-wrap { --cut: 0 }
 
 /* while the loader is up, page content is mounted but its entrance animations wait */
 .hold main, .hold main * { animation-play-state: paused !important }
@@ -144,7 +150,7 @@ button { font-family: inherit }
 .stat-big { font-size: 38px; font-weight: 500; letter-spacing: -0.03em; font-family: Newsreader, serif }
 .stat-text { font-size: 15px; line-height: 1.5 }
 /* wraps to a new line as a unit; only breaks internally if wider than the card */
-.stat-text .term { display: inline-block }
+.stat-text .term { display: inline-block; padding-left: 4px }
 .chips { display: flex; flex-wrap: wrap; gap: 8px }
 .chip { font-size: 14px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); transition: border-color 0.25s, color 0.25s }
 .chip:hover { border-color: var(--acc); color: var(--acc) }
@@ -206,10 +212,13 @@ button { font-family: inherit }
 .section-h .acc { color: var(--acc) }
 
 /* ---------- interests photo stack ---------- */
-.stack-wrap { display: flex; flex-direction: column; gap: 14px; align-items: flex-start }
-.stack { position: relative; width: min(420px, 100%); aspect-ratio: 4 / 3; border: none; background: none; padding: 0; margin: 10px 0 24px; cursor: pointer; -webkit-tap-highlight-color: transparent }
+.album { display: flex; justify-content: center; padding: 16px 0 8px; animation: rise 0.7s both }
+.chips-center { justify-content: center; max-width: 720px; margin: 24px auto 0 }
+.stack-wrap { display: flex; flex-direction: column; gap: 14px; align-items: center; width: min(540px, 100%) }
+.stack { position: relative; width: 100%; aspect-ratio: 4 / 3; border: none; background: none; padding: 0; margin: 10px 0 24px; cursor: pointer; -webkit-tap-highlight-color: transparent }
 .photo { position: absolute; inset: 0; margin: 0; background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 10px 10px 44px; box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.35); transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); box-sizing: border-box; will-change: transform }
 [data-theme="dark"] .photo { background: #1a1c20 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block }
-.photo figcaption { position: absolute; left: 14px; right: 14px; bottom: 13px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--mute); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.photo figcaption { position: absolute; left: 14px; right: 14px; bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--mute); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+@media (max-width: 860px) { .photo figcaption { font-size: 12px; bottom: 13px } }
 .stack-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--mute) }

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { INTRO, DOORS, FOOT_LINKS } from '../data/content'
 
 const FULL = INTRO.join('')
@@ -9,21 +9,37 @@ const FULL = INTRO.join('')
 // navigation back to home, and the short one only on first load
 let visited = false
 
+const reducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 export default function Home({ loaderDone }) {
   const nameRef = useRef(null)
-  const [dodge, setDodge] = useState([])
-  const [typed, setTyped] = useState(0)
-  const [typingDone, setTypingDone] = useState(false)
+  const beforeRef = useRef(null)
+  const boldRef = useRef(null)
+  const afterRef = useRef(null)
+  const caretRef = useRef(null)
+  const dodgeRaf = useRef(0)
 
   // typewriter: starts 0.2s after the loader unmounts (≈0.7s after its fade
-  // begins), or after 1s when navigating back to home
+  // begins), or after 1s when navigating back to home. Writes straight to the
+  // DOM — a setState per character would re-render the whole page ~200 times.
   useEffect(() => {
     if (!loaderDone) return undefined
     const delay = visited ? 1000 : 200
     visited = true
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const [a, b, c] = INTRO
+    const setTyped = (n) => {
+      if (!beforeRef.current) return
+      beforeRef.current.textContent = a.slice(0, n)
+      boldRef.current.textContent = b.slice(0, Math.max(0, n - a.length))
+      afterRef.current.textContent = c.slice(0, Math.max(0, n - a.length - b.length))
+    }
+    const finish = () => {
+      if (caretRef.current) caretRef.current.style.opacity = 0
+    }
+    if (reducedMotion()) {
       setTyped(FULL.length)
-      setTypingDone(true)
+      finish()
       return undefined
     }
     let timer
@@ -32,7 +48,7 @@ export default function Home({ loaderDone }) {
       i += 1
       setTyped(i)
       if (i >= FULL.length) {
-        setTypingDone(true)
+        finish()
         return
       }
       const ch = FULL[i - 1]
@@ -46,33 +62,40 @@ export default function Home({ loaderDone }) {
     return () => clearTimeout(timer)
   }, [loaderDone])
 
-  // cursor dodge: letters within 90px flee along the pointer→letter vector
+  useEffect(() => () => cancelAnimationFrame(dodgeRaf.current), [])
+
+  // cursor dodge: letters within 90px flee along the pointer→letter vector.
+  // Transforms are applied directly in a rAF — no React state per mousemove.
   const onNameMove = (e) => {
     const el = nameRef.current
-    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const R = 90
-    const F = 34
-    const out = []
-    Array.from(el.children).forEach((sp, i) => {
-      const b = sp.getBoundingClientRect()
-      const cx = b.left + b.width / 2
-      const cy = b.top + b.height / 2
-      const dx = cx - e.clientX
-      const dy = cy - e.clientY
-      const dist = Math.hypot(dx, dy)
-      if (dist < R && dist > 0.01) {
-        const k = 1 - dist / R
-        const f = F * k * k
-        out[i] = [Math.round((dx / dist) * f), Math.round((dy / dist) * f), Math.round((dx / dist) * 6 * k)]
-      }
+    if (!el || reducedMotion()) return
+    const mx = e.clientX
+    const my = e.clientY
+    cancelAnimationFrame(dodgeRaf.current)
+    dodgeRaf.current = requestAnimationFrame(() => {
+      const R = 90
+      const F = 34
+      Array.from(el.children).forEach((sp) => {
+        const rect = sp.getBoundingClientRect()
+        const dx = rect.left + rect.width / 2 - mx
+        const dy = rect.top + rect.height / 2 - my
+        const dist = Math.hypot(dx, dy)
+        if (dist < R && dist > 0.01) {
+          const k = 1 - dist / R
+          const f = F * k * k
+          sp.style.transform = `translate(${Math.round((dx / dist) * f)}px, ${Math.round((dy / dist) * f)}px) rotate(${Math.round((dx / dist) * 6 * k)}deg)`
+        } else {
+          sp.style.transform = 'none'
+        }
+      })
     })
-    setDodge(out)
   }
 
-  const [a, b] = INTRO
-  const typedBefore = a.slice(0, typed)
-  const typedBold = b.slice(0, Math.max(0, typed - a.length))
-  const typedAfter = INTRO[2].slice(0, Math.max(0, typed - a.length - b.length))
+  const onNameLeave = () => {
+    cancelAnimationFrame(dodgeRaf.current)
+    const el = nameRef.current
+    if (el) Array.from(el.children).forEach((sp) => { sp.style.transform = 'none' })
+  }
 
   return (
     <main className="page">
@@ -82,25 +105,20 @@ export default function Home({ loaderDone }) {
       </Head>
       <div className="hero">
         <div className="hero-col">
-          <h1 className="name" ref={nameRef} onMouseMove={onNameMove} onMouseLeave={() => setDodge([])}>
-            {'Gent Yong'.split('').map((ch, i) => {
-              const d = dodge[i]
-              return (
-                <span key={i} style={{ transform: d ? `translate(${d[0]}px, ${d[1]}px) rotate(${d[2]}deg)` : 'none' }}>
-                  {ch}
-                </span>
-              )
-            })}
+          <h1 className="name" ref={nameRef} onMouseMove={onNameMove} onMouseLeave={onNameLeave}>
+            {'Gent Yong'.split('').map((ch, i) => (
+              <span key={i}>{ch}</span>
+            ))}
           </h1>
           <p className="intro">
             <span className="ghost" aria-hidden="true">
-              {a}<b>{b}</b>{INTRO[2]}
+              {INTRO[0]}<b>{INTRO[1]}</b>{INTRO[2]}
             </span>
             <span className="typed">
-              <span>{typedBefore}</span>
-              <b>{typedBold}</b>
-              <span>{typedAfter}</span>
-              <span className="caret" style={{ opacity: typingDone ? 0 : 1 }} />
+              <span ref={beforeRef} />
+              <b ref={boldRef} />
+              <span ref={afterRef} />
+              <span className="caret" ref={caretRef} />
             </span>
           </p>
         </div>

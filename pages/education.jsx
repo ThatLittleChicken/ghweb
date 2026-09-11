@@ -31,8 +31,7 @@ export default function Education() {
                   'Larry R. and Janice K. White Scholarship',
                 ].map((h, i) => (
                   <span key={h}>
-                    {i > 0 && ' · '}
-                    <span className="term">{h}</span>
+                    <span className="term">{h}{i < 4 && ' · '}</span>
                   </span>
                 ))}
               </div>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script type="module" src="./office-scene.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;min-height:100%}
+html{overflow-y:scroll;scrollbar-width:thin;scrollbar-color:rgba(128,128,128,.35) transparent}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:4px}::-webkit-scrollbar-track{background:transparent}body{font-family:Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}a:hover{color:var(--acc)}
+[data-theme="light"]{--bg:#f5f5f3;--fg:#161719;--mute:#6b6f76;--line:#dcdedf;--acc:oklch(0.48 0.1 250);--card:rgba(255,255,255,.55);--blob1:oklch(0.92 0.02 250);--blob2:oklch(0.93 0.015 90)}
+[data-theme="dark"]{--bg:#101113;--fg:#ececea;--mute:#8e939b;--line:#26292d;--acc:oklch(0.75 0.09 250);--card:rgba(20,22,26,.7);--blob1:oklch(0.28 0.03 250);--blob2:oklch(0.26 0.02 90)}
+@keyframes write1{0%{stroke-dashoffset:1282}45%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+@keyframes write2{0%,45%{stroke-dashoffset:1311}90%,100%{stroke-dashoffset:0}}
+@keyframes loop1{0%{stroke-dashoffset:1282}34%{stroke-dashoffset:0}80%{stroke-dashoffset:0}92%,100%{stroke-dashoffset:-1282}}
+@keyframes loop2{0%,34%{stroke-dashoffset:1311}66%{stroke-dashoffset:0}82%{stroke-dashoffset:0}100%{stroke-dashoffset:-1311}}
+@keyframes pageIn{from{opacity:0;transform:translateY(18px) scale(.995);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes drift1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(12vw,8vh) scale(1.15)}100%{transform:translate(0,0) scale(1)}}
+@keyframes drift2{0%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-10vw,-6vh) scale(.95)}100%{transform:translate(0,0) scale(1.1)}}
+@keyframes wobble{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes loaderOut{from{opacity:1}to{opacity:0;visibility:hidden}}
+@keyframes sceneIn{from{opacity:0}to{opacity:1}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+/* mobile */
+.gy-nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;font-size:15px;font-weight:500}
+.gy-burger{display:none}
+.gy-resume-label{display:inline}
+@media (max-width:1020px){
+  .gy-nav{font-size:14px}
+  .gy-nav a{padding:8px 9px !important;background-position:9px calc(100% - 6px) !important}
+  .gy-resume-label{display:none}
+}
+@media (max-width:860px){
+  .gy-header{grid-template-columns:auto 1fr auto !important;gap:0 !important;padding:16px 20px !important}
+  .gy-header > div{justify-content:flex-end !important;margin-right:0}
+  .gy-nav{display:none}
+  .gy-nav.gy-open{display:flex;position:absolute;left:20px;right:20px;top:calc(100% - 4px);flex-direction:column;align-items:stretch;gap:4px;padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 48px -24px rgba(0,0,0,.35);z-index:5;animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+  .gy-nav.gy-open a{padding:12px 14px !important;border-radius:12px !important;font-size:16px;font-weight:500;background-image:none !important;background-color:transparent}
+  .gy-nav.gy-open a[data-active="1"]{background-color:var(--card);color:var(--acc)}
+  .gy-burger{display:inline-flex}
+  .gy-resume-label{display:none}
+  .gy-hero{min-height:auto !important;padding-top:12px}
+  .gy-hero-col{width:100% !important}
+  .gy-scene{height:min(78vh,620px) !important;opacity:.5;--fade-x:50%;--fade-w:140%;--fade-h:38%;--fade-y:38%}
+  .gy-row{grid-template-columns:1fr !important;gap:6px 0 !important;padding:22px 0 !important}
+  .gy-year{position:static !important}
+  .gy-footer{gap:10px 20px !important;margin-top:48px !important}
+  .gy-cards{margin-top:40px !important;gap:10px !important}
+  .gy-card{min-height:0 !important;padding:16px 18px !important;gap:8px !important;border-radius:16px !important;display:grid !important;grid-template-columns:1fr auto;align-items:center}
+  .gy-card-meta{grid-column:1 / -1;font-size:11px !important}
+  .gy-card-label{font-size:20px !important;margin-top:0 !important}
+  .gy-card-sub{grid-column:1 / -1;font-size:14px !important}
+}
+</style></helmet>
+
+<sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}"><div data-theme="{{ theme }}" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--fg);transition:opacity .45s ease;opacity:{{ loaderOpacity }};pointer-events:none">
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 170" style="width:min(260px,60vw);height:auto;display:block;overflow:visible" aria-label="hello there">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+     <path style="stroke-dasharray:1282;animation:loop1 1.9s linear infinite" d="M2 153.457C22.2158 125.32 42.7903 97.6216 56.6685 66.1693C64.1169 49.2888 69.5886 31.9461 68.7122 13.528C68.3889 6.73369 64.9402 -3.86301 57.6675 6.02993C41.6211 27.8576 37.2108 59.6104 33.1916 85.0954C31.0309 98.7956 29.8993 112.5 30.3055 126.36C30.5317 134.078 31.5753 146.931 32.9696 154.801C33.4453 157.487 34.6979 164.228 37.4096 166.901C43.2663 172.675 48.1945 153.91 49.1758 151.802C55.2654 138.721 60.0779 124.905 66.7142 112.088C70.5538 104.673 77.278 96.8035 80.7004 108.779C84.9279 123.571 84.9982 139.726 92.9106 153.508C99.0254 164.16 107.623 152.619 111 147C117.519 136.155 125.996 120.294 123.599 107.338C122.875 103.427 116.822 112.848 116 116.742C113.536 128.42 113.132 140.202 115.445 151.957C115.591 152.699 120.084 167.437 126.1 164.006C133.742 159.648 137.357 144.609 139.642 137.53C143.98 124.094 146.973 110.278 150.132 96.5751C152.473 86.4192 155.875 75.7277 156.737 65.2902C157.116 60.6986 157.625 59 157.625 53.5C157.391 51.6605 158.22 49.4569 157.625 48.2775C153.4 39.9128 149.001 65.3418 148.079 74.5464C146.588 89.4218 146.992 104.345 148.19 119.224C149.063 130.074 148.155 150.408 161.565 155.835C181.438 163.877 187.116 137.188 190.971 125.5C197.426 105.926 201.325 97.3607 204.271 77.0863C205.225 70.5214 210 48.2775 209 45C208.5 40.5 205.765 40.0055 205.5 40.5C205.5 40.5 203.549 40.8909 202 47C197.88 63.2525 195.347 80.0795 192.59 96.5751C190.202 110.866 190.165 125.815 192.59 140.322C193.131 143.556 196.452 157.958 203.58 153.146C209.442 149.189 210.266 141.021 215.29 136.341C219.281 132.623 220.822 128.669 223.338 123.982C224.856 121.154 225.78 120.09 225.78 116.742C225.78 111.025 223.568 114.376 222.339 118.345C219.258 128.298 218.802 139.975 222.45 149.837C223.823 153.548 226.07 157.31 229.221 159.972C234.573 164.495 237.898 156.551 239.655 152.836C241.909 148.071 251.469 127.245 241.653 124.292C232.448 121.522 224.723 124.153 218.787 130.187"></path>
+     <path style="stroke-dasharray:1311;animation:loop2 1.9s linear infinite" d="M273 113.5C284.211 102.094 304.926 82.3473 313 68.5C322.127 52.8479 332.018 41.9267 336.222 24.0037C337.47 18.6857 335.812 6.56175 327.944 14.7739C311.675 31.756 307.306 59.1665 302.278 81.5037C297.483 102.803 291.036 131.941 300.444 153.004C309.172 172.541 322.652 153.966 327.944 143.004C339.827 118.39 348.21 102.134 354 75.5C356.5 64 358.5 61 358.5 28C358.5 24.5 353.778 17 352 28C349.657 42.5 348.427 54.7739 346 70.2739C343.178 88.2926 340.226 105.203 337.429 123.226C335.595 135.041 332.799 145.694 334 158C334.488 163 337.175 162 338.667 158.893C344.136 147.499 345.063 135.329 350 123.226C353.007 115.854 357.5 107.115 363.667 102.337C365.201 101.148 368.827 99.6728 368.944 105.115C369.288 121.092 367.112 141.486 375.222 156.004C383.677 171.138 391.389 152.496 393.833 147C408.07 114.989 425.722 108 410.778 99.6703C402.222 94.5 383.909 144.5 401 156.004C419.308 168.326 442.725 119.614 444.944 109.504C445.106 108.77 447.006 95.7168 446.056 96.6148C442.568 99.909 440.752 107.601 439.611 111.893C438.597 115.708 433.819 130.873 439.5 133.504C446.278 136.642 453.378 121.904 455.444 117.837C457.94 112.925 460.539 108.071 463.056 103.17C463.201 102.886 465.728 98.8853 466 99.837C466.375 101.15 465.89 104.283 465.833 105.281C465.35 113.771 464.717 122.249 464.056 130.726C463.542 137.315 459.874 153.645 465.778 158.893C471.413 163.902 477.105 151.215 480.111 147C480.111 147 489.227 132.773 495 123.226C499.667 115.507 508.5 99.7259 502 96.674C499 94.2259 493.057 102.505 492.389 103.285C482.822 114.446 476.921 134.873 480.111 149.341C485.37 173.191 530.798 148.993 542.778 143.004"></path>
+    </g>
+   </svg>
+  </div></sc-if>
+<div data-theme="{{ theme }}" style="position:relative;min-height:100vh;background:var(--bg);color:var(--fg);overflow:hidden;transition:background .5s,color .5s">
+ <!-- subtle animated background -->
+ <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+  <div style="position:absolute;top:-20vh;left:-10vw;width:60vw;height:60vw;border-radius:50%;background:var(--blob1);filter:blur(90px);opacity:.75;animation:drift1 26s ease-in-out infinite"></div>
+  <div style="position:absolute;bottom:-25vh;right:-10vw;width:55vw;height:55vw;border-radius:50%;background:var(--blob2);filter:blur(100px);opacity:.7;animation:drift2 32s ease-in-out infinite"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px, transparent 1px);background-size:28px 28px;opacity:.55;mask-image:radial-gradient(ellipse at center, black 40%, transparent 85%)"></div>
+  <sc-if value="{{ showScene }}" hint-placeholder-val="{{ true }}"><div class="gy-scene" style="position:absolute;top:0;left:0;right:0;height:min(100vh,900px);animation:sceneIn 2.4s .3s ease-out both;mask-image:{{ sceneMask }};-webkit-mask-image:{{ sceneMask }};mask-composite:intersect;-webkit-mask-composite:source-in"><x-import component-from-global-scope="office-scene" dark="{{ sceneDark }}" style="position:absolute;inset:0" hint-size="100%,100%"></x-import></div></sc-if>
+ </div>
+
+ <!-- nav -->
+ <header class="gy-header" style="position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:22px clamp(20px,5vw,64px);max-width:1180px;margin:0 auto;box-sizing:border-box">
+  <a href="#" onClick="{{ goHome }}" style="font-weight:700;font-size:18px;letter-spacing:-.02em;display:inline-flex;align-items:center;gap:8px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--acc);animation:blink 2.4s steps(1) infinite"></span>gentyo.ng</a>
+  <nav class="{{ navClass }}">
+   <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+    <a href="#" onClick="{{ n.go }}" data-active="{{ n.active }}" style="padding:8px 12px;white-space:nowrap;border-radius:999px;background-image:linear-gradient(var(--acc),var(--acc));background-repeat:no-repeat;background-size:{{ n.underline }} 2px;background-position:12px calc(100% - 6px);transition:background-size .35s cubic-bezier(.2,.8,.2,1),transform .25s" style-hover="background-size:calc(100% - 18px) 2px">{{ n.label }}</a>
+   </sc-for>
+  </nav>
+  <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end">
+   <a href="#" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--fg);color:var(--bg);font-size:14px;font-weight:600;transition:transform .25s,box-shadow .25s" style-hover="transform:translateY(-2px);box-shadow:0 8px 20px -8px var(--fg);color:var(--bg)"><span class="gy-resume-label">Resume.pdf</span><span style="display:inline-block;transition:transform .3s">↓</span></a>
+   <button onClick="{{ toggleTheme }}" aria-label="Toggle theme" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:border-color .25s" style-hover="border-color:var(--fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></sc-if></svg></button>
+   <button class="gy-burger" onClick="{{ toggleMenu }}" aria-label="Menu" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;align-items:center;justify-content:center;padding:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><path d="M6 6l12 12M18 6L6 18"></path></sc-if><sc-if value="{{ menuClosed }}" hint-placeholder-val="{{ true }}"><path d="M4 7h16M4 12h16M4 17h16"></path></sc-if></svg></button>
+  </div>
+ </header>
+
+ <!-- HOME -->
+ <sc-if value="{{ isHomeReady }}" hint-placeholder-val="{{ true }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <div class="gy-hero" style="position:relative;z-index:1;width:100%;min-height:min(72vh,720px);display:flex;align-items:center">
+  <div class="gy-hero-col" style="display:flex;flex-direction:column;align-items:flex-start;min-width:0;width:min(100%,560px)">
+
+  <!-- big playful name: each letter lifts on hover -->
+  <h1 ref="{{ nameRef }}" onMouseMove="{{ onNameMove }}" onMouseLeave="{{ onNameLeave }}" style="margin:0;display:flex;flex-wrap:wrap;justify-content:flex-start;font-size:clamp(40px,9vw,84px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500;animation:rise .9s .1s cubic-bezier(.2,.8,.2,1) both">
+   <sc-for list="{{ letters }}" as="l" hint-placeholder-count="9">
+    <span style="display:inline-block;white-space:pre;cursor:default;transform:{{ l.transform }};transition:transform .45s cubic-bezier(.2,.8,.2,1)">{{ l.ch }}</span>
+   </sc-for>
+  </h1>
+
+  <p style="position:relative;max-width:520px;margin:26px 0 0;font-size:clamp(16px,1.6vw,18px);line-height:1.55;color:var(--mute);text-wrap:pretty"><span style="visibility:hidden" aria-hidden="true">CS senior at Brigham Young University who builds things end to end and researches how networks shape inequality. Finishing <b style="font-weight:600">Dec 2026</b>, looking for SWE roles and grad school.</span><span style="position:absolute;inset:0"><span>{{ typedBefore }}</span><b style="color:var(--fg);font-weight:600">{{ typedBold }}</b><span>{{ typedAfter }}</span><span style="display:inline-block;width:2px;height:1em;margin-left:2px;vertical-align:-0.15em;background:var(--acc);animation:blink 1s steps(1) infinite;opacity:{{ cursorOpacity }}"></span></span></p>
+  </div>
+  </div>
+
+  <!-- three doorway cards with tilt hover -->
+  <div class="gy-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:8px 0 0;animation:rise .9s .4s cubic-bezier(.2,.8,.2,1) both">
+   <sc-for list="{{ doors }}" as="d" hint-placeholder-count="3">
+    <a href="#" onClick="{{ d.go }}" class="gy-card" style="display:flex;flex-direction:column;gap:18px;padding:26px;border:1px solid var(--line);border-radius:22px;background:var(--card);min-height:190px;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .3s;color:inherit" style-hover="transform:translateY(-5px);box-shadow:0 30px 50px -30px rgba(0,0,0,.35);border-color:var(--acc);color:inherit">
+     <div class="gy-card-meta" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mute)"><span>{{ d.index }}</span><span>{{ d.count }}</span></div>
+     <div class="gy-card-label" style="margin-top:auto;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1">{{ d.label }}</div>
+     <div class="gy-card-sub" style="font-size:15px;color:var(--mute);line-height:1.4">{{ d.sub }}</div>
+    </a>
+   </sc-for>
+  </div>
+
+  <!-- footer links -->
+  <div class="gy-footer" style="display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:center;margin-top:72px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);animation:rise .9s .55s both">
+   <a href="mailto:yonggh@byu.edu" >yonggh@byu.edu</a>
+   <a href="https://github.com/thatlittlechicken" >github</a>
+   <a href="https://www.linkedin.com/in/gentyong/" >linkedin</a>
+   <a href="https://instagram.com/genthoong" >instagram</a>
+   <a href="https://open.spotify.com/user/22kf3sv5ir57t7v7jf3qm3upy" >spotify</a>
+  </div>
+ </main>
+ </sc-if>
+
+ <!-- EXPERIENCE -->
+ <sc-if value="{{ isExp }}" hint-placeholder-val="{{ false }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <h1 style="margin:0 0 12px;font-size:clamp(40px,6vw,72px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500">Work<span style="color:var(--acc)">.</span></h1>
+  <p style="margin:0 0 56px;max-width:520px;font-size:16px;line-height:1.55;color:var(--mute)">Research and web work at BYU, plus a summer in industry. Most recent first.</p>
+  <div style="display:flex;flex-direction:column">
+   <sc-for list="{{ jobs }}" as="j" hint-placeholder-count="4">
+    <div class="gy-row" style="display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:12px 32px;padding:30px 0;border-top:1px solid var(--line);animation:rise .7s both;animation-delay:{{ j.delay }}">
+     <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);line-height:1.6;padding-top:8px">{{ j.when }}</div>
+     <div>
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px"><span style="font-size:clamp(20px,2.2vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.2">{{ j.title }}</span><span style="font-size:16px;color:var(--mute)">{{ j.org }}</span></div>
+      <ul style="margin:14px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:var(--mute)">
+       <sc-for list="{{ j.points }}" as="p" hint-placeholder-count="2"><li>{{ p }}</li></sc-for>
+      </ul>
+     </div>
+    </div>
+   </sc-for>
+  </div>
+  </main>
+ </sc-if>
+
+ <!-- EDUCATION -->
+ <sc-if value="{{ isEdu }}" hint-placeholder-val="{{ false }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <h1 style="margin:0 0 12px;font-size:clamp(40px,6vw,72px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500">Studied<span style="color:var(--acc)">.</span></h1>
+  <p style="margin:0 0 56px;max-width:520px;font-size:16px;line-height:1.55;color:var(--mute)">Brigham Young University, August 2022 to December 2026.</p>
+  <div class="gy-row" style="display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:12px 32px;padding:30px 0;border-top:1px solid var(--line);animation:rise .7s .15s both">
+   <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);line-height:1.6;padding-top:6px">2022 – 2026</div>
+   <div>
+    <div style="font-size:clamp(20px,2.2vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.2">Bachelor of Science in Computer Science</div>
+    <div style="margin-top:4px;font-size:16px;color:var(--mute)">Brigham Young University · Provo, UT · Math minor</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:26px">
+     <div style="padding:18px 20px;border-radius:16px;background:var(--card);border:1px solid var(--line)"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:8px">GPA</div><div style="font-size:30px;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif">3.98</div></div>
+     <div style="padding:18px 20px;border-radius:16px;background:var(--card);border:1px solid var(--line)"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:8px">Honors</div><div style="font-size:15px;line-height:1.5">Dean's List · Academic Scholarship · Google Endowed Mentorship Scholarship</div></div>
+    </div>
+   </div>
+  </div>
+  <div class="gy-row" style="display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:12px 32px;padding:30px 0;border-top:1px solid var(--line);animation:rise .7s .25s both">
+   <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);line-height:1.6;padding-top:6px">Coursework</div>
+   <div style="display:flex;flex-wrap:wrap;gap:8px">
+    <sc-for list="{{ courses }}" as="c" hint-placeholder-count="10"><span style="font-size:14px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);transition:border-color .25s,color .25s" style-hover="border-color:var(--acc);color:var(--acc)">{{ c }}</span></sc-for>
+   </div>
+  </div>
+  <div class="gy-row" style="display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:12px 32px;padding:30px 0;border-top:1px solid var(--line);animation:rise .7s .35s both">
+   <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);line-height:1.6;padding-top:6px">Skills</div>
+   <div style="display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.55">
+    <div><span style="color:var(--mute)">Languages</span><br>Python, TypeScript, JavaScript, Java, C, C++, SQL, HTML, CSS, Unix · English, Chinese, Malay</div>
+    <div><span style="color:var(--mute)">Technologies</span><br>Agentic Tooling, Node.js, React, Next.js, Express, AWS, MySQL, MongoDB, Supabase, REST API, Git, CI/CD, Sklearn, PyTorch, NumPy, Pandas, NetworkX</div>
+   </div>
+  </div>
+ </main>
+ </sc-if>
+
+ <!-- PROJECTS -->
+ <sc-if value="{{ isProj }}" hint-placeholder-val="{{ false }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <h1 style="margin:0 0 12px;font-size:clamp(40px,6vw,72px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500">Built<span style="color:var(--acc)">.</span></h1>
+  <p style="margin:0 0 56px;max-width:520px;font-size:16px;line-height:1.55;color:var(--mute)">Projects and research, with the stack on each.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px">
+   <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+    <a href="#" style="display:flex;flex-direction:column;gap:16px;padding:28px;border-radius:24px;background:var(--card);border:1px solid var(--line);min-height:260px;color:inherit;animation:rise .7s both;animation-delay:{{ p.delay }};transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .3s" style-hover="transform:translateY(-5px);box-shadow:0 30px 50px -30px rgba(0,0,0,.35);border-color:var(--acc);color:inherit">
+     <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="3"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mute)">{{ t }}</span></sc-for></div>
+     <div style="margin-top:auto;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15">{{ p.title }}</div>
+     <div style="font-size:15px;line-height:1.5;color:var(--mute)">{{ p.desc }}</div>
+     <div style="font-size:14px;color:var(--acc);font-weight:600">{{ p.cta }} →</div>
+    </a>
+   </sc-for>
+  </div>
+ </main>
+ </sc-if>
+
+ <!-- AWARDS -->
+ <sc-if value="{{ isAwards }}" hint-placeholder-val="{{ false }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <h1 style="margin:0 0 12px;font-size:clamp(40px,6vw,72px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500">Won<span style="color:var(--acc)">.</span></h1>
+  <p style="margin:0 0 56px;max-width:560px;font-size:16px;line-height:1.55;color:var(--mute);text-wrap:pretty">Awards from school and mostly external competitions during high school, through hard work and determination.</p>
+  <div style="display:flex;flex-direction:column;gap:8px">
+   <sc-for list="{{ awardYears }}" as="y" hint-placeholder-count="5">
+    <div class="gy-row" style="display:grid;grid-template-columns:minmax(90px,160px) minmax(0,1fr);gap:8px 32px;padding:26px 0;border-top:1px solid var(--line);animation:rise .7s both;animation-delay:{{ y.delay }}">
+     <div style="font-size:clamp(28px,3.5vw,40px);font-weight:500;letter-spacing:-.03em;line-height:1;color:var(--fg);font-family:Newsreader,serif;font-weight:500;position:sticky;top:20px;align-self:start" class="gy-year">{{ y.year }}</div>
+     <div style="display:flex;flex-direction:column">
+      <sc-for list="{{ y.items }}" as="a" hint-placeholder-count="4">
+       <div style="display:flex;justify-content:space-between;gap:8px 16px;align-items:baseline;flex-wrap:wrap;padding:10px 0;border-bottom:1px dashed var(--line);font-size:16px;line-height:1.4;transition:color .2s" style-hover="color:var(--acc)"><span style="flex:1 1 200px">{{ a.name }}</span><span style="flex:1 0 auto;margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mute);text-align:right">{{ a.prize }}</span></div>
+      </sc-for>
+     </div>
+    </div>
+   </sc-for>
+  </div>
+ </main>
+ </sc-if>
+
+ <!-- WRITING -->
+ <sc-if value="{{ isWriting }}" hint-placeholder-val="{{ false }}">
+ <main style="position:relative;z-index:1;padding:clamp(24px,5vh,64px) clamp(20px,5vw,64px) 80px;max-width:1180px;margin:0 auto;box-sizing:border-box;animation:pageIn .6s cubic-bezier(.2,.8,.2,1) both">
+  <h1 style="margin:0 0 12px;font-size:clamp(40px,6vw,72px);line-height:1;font-weight:500;letter-spacing:-.03em;font-family:Newsreader,serif;font-weight:500">Wrote<span style="color:var(--acc)">.</span></h1>
+  <p style="margin:0 0 56px;max-width:520px;font-size:16px;line-height:1.55;color:var(--mute)">Papers and talks so far. Blog posts land here too.</p>
+  <div style="display:flex;flex-direction:column">
+   <sc-for list="{{ writing }}" as="w" hint-placeholder-count="2">
+    <a href="#" class="gy-row" style="display:grid;grid-template-columns:minmax(90px,160px) minmax(0,1fr);gap:8px 32px;padding:28px 0;border-top:1px solid var(--line);color:inherit;animation:rise .7s both;animation-delay:{{ w.delay }}" style-hover="color:var(--acc)">
+     <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);padding-top:6px">{{ w.meta }}</div>
+     <div><div style="font-size:clamp(18px,2vw,22px);font-weight:600;letter-spacing:-.02em;line-height:1.3;text-wrap:pretty">{{ w.title }}</div><div style="margin-top:10px;font-size:15px;line-height:1.5;color:var(--mute)">{{ w.sub }}</div></div>
+    </a>
+   </sc-for>
+   <div class="gy-row" style="display:grid;grid-template-columns:minmax(90px,160px) minmax(0,1fr);gap:8px 32px;padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);padding-top:6px">Blog</div>
+    <div style="font-size:16px;color:var(--mute);line-height:1.5">First post coming soon. Posts will list here with date, title and a one-line summary, same layout as above.</div>
+   </div>
+  </div>
+ </main>
+ </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;show3d&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;3D background (home office)&quot;},&quot;fadeWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:75,&quot;min&quot;:20,&quot;max&quot;:140,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeHeight&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:20,&quot;max&quot;:140,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:18,&quot;min&quot;:-20,&quot;max&quot;:60,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:57,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;centerFeather&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:62,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;centerDrop&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:58,&quot;min&quot;:5,&quot;max&quot;:95,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeFeather&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:57,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeDrop&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:46,&quot;min&quot;:5,&quot;max&quot;:95,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · light&quot;},&quot;fadeWidthDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:75,&quot;min&quot;:20,&quot;max&quot;:140,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;fadeHeightDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:20,&quot;max&quot;:140,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;fadeXDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:18,&quot;min&quot;:-20,&quot;max&quot;:60,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;fadeYDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:57,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;centerFeatherDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:62,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;centerDropDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:58,&quot;min&quot;:5,&quot;max&quot;:95,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;fadeFeatherDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:57,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;},&quot;fadeDropDark&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:46,&quot;min&quot;:5,&quot;max&quot;:95,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero fade · dark&quot;}}">
+class Component extends DCLogic {
+  state = { page: 'home', theme: null, typed: 0, typingDone: false, loading: true, menu: false };
+  intro = ['CS senior at Brigham Young University who builds things end to end and researches how networks shape inequality. Finishing ', 'Dec 2026', ', looking for SWE roles and grad school.'];
+  componentDidMount() {
+    const t0 = performance.now();
+    const done = () => { const wait = Math.max(0, 1200 - (performance.now() - t0)); this.loadTimer = setTimeout(() => { this.setState({ fading: true }); this.startTyping(700); this.loadTimer = setTimeout(() => this.setState({ loading: false }), 500); }, wait); };
+    const ready = () => (document.readyState === 'complete' && (document.querySelector('office-scene canvas') || !(this.props.show3d ?? true)));
+    const poll = () => { if (ready()) done(); else if (performance.now() - t0 > 6000) done(); else this.loadTimer = setTimeout(poll, 120); };
+    poll();
+  }
+  componentDidUpdate(p, s) { if (s && this.state.page === 'home' && s.page !== 'home') this.startTyping(); }
+  componentWillUnmount() { clearTimeout(this.typeTimer); clearTimeout(this.loadTimer); }
+  startTyping(delay = 1000) {
+    clearTimeout(this.typeTimer);
+    const full = this.intro.join(''); let i = 0;
+    this.setState({ typed: 0, typingDone: false });
+    const step = () => {
+      if (this.state.page !== 'home') return;
+      i++; this.setState({ typed: i, typingDone: i >= full.length });
+      if (i >= full.length) return;
+      const ch = full[i - 1]; let d = 7 + Math.random() * 14;
+      if (ch === ' ') d += Math.random() < 0.15 ? 30 : 2;
+      if (/[,.]/.test(ch)) d += 70 + Math.random() * 60;
+      if (Math.random() < 0.02) d += 90;
+      this.typeTimer = setTimeout(step, d);
+    };
+    this.typeTimer = setTimeout(step, delay);
+  }
+  go(page) { return (e) => { e && e.preventDefault && e.preventDefault(); this.setState({ page, menu: false }); window.scrollTo(0, 0); }; }
+  renderVals() {
+    const page = this.state.page;
+    const theme = this.state.theme ?? this.props.theme ?? 'light';
+    const loop = this.props.loopHello ?? false;
+    const pages = [['home','Home'],['exp','Experience'],['edu','Education'],['proj','Projects'],['awards','Awards'],['writing','Writing']];
+    const d = i => (0.15 + i * 0.08) + 's';
+    const jobs = [
+      { when: 'Feb 2025 – present', title: 'Undergraduate Researcher', org: 'BYU · HCMI Lab & MTRIE Lab', points: ['Investigated poverty mitigation through RL by optimally rewiring networks using DQN with PyTorch, achieving results outperforming baseline.', 'Built a consolidated multimodal language repository to reform CRUD operations for NLP training and linguistic research.'] },
+      { when: 'Apr – Aug 2026', title: 'Software Engineer Intern', org: 'Partner.Co · Lehi, UT', points: ['End-to-end event pipeline spanning event definition, database emission, API Gateway, EventBridge, SQS and Lambda, with DynamoDB idempotency handling and DLQs.', 'Contributed to a Quarkus tracing extension that injects trace context into events, enabling annotation-driven end-to-end CloudWatch tracing.'] },
+      { when: 'May 2024 – Dec 2025', title: 'Web Developer', org: 'BYU', points: ['Maintained and improved the department site; created 100+ web pages.', 'Built a Next.js + Pixi.js game with MySQL user data, hosted on the department IIS server for marketing events, reaching 2,000+ players.'] },
+      { when: 'Jan 2024 – Feb 2025', title: 'Makerspace Lab Technician', org: 'BYU', points: ['Backend queue automator integrating Google and Box APIs with Node.js webhooks on EC2, removing 90% of manual entries.', 'Researched emerging technologies and tools for the university makerspace.'] },
+    ].map((j, i) => ({ ...j, delay: d(i) }));
+    const projects = [
+      { title: 'ChatGPT Wrapper', tags: ['TypeScript','Next.js','OpenAI API','AWS','Tailwind'], desc: 'Tailored multimodal agents for real-world needs with file and web search. Serverless via CloudFront + Lambda, Cognito auth, SES email, Aurora and S3 storage.', cta: 'Case study', tilt: '-1deg' },
+      { title: 'Network rewiring with DQN', tags: ['PyTorch','NetworkX','RL'], desc: 'Research code behind the IEEE SMC submission: optimally rewiring exchange networks to mitigate poverty, outperforming baseline.', cta: 'Read the paper', tilt: '1deg' },
+      { title: 'Department arcade game', tags: ['Next.js','Pixi.js','MySQL'], desc: 'Web game for department marketing events, hosted on IIS, played by 2,000+ people.', cta: 'Play', tilt: '-1deg' },
+      { title: 'Makerspace queue automator', tags: ['Node.js','Google API','Box API','EC2'], desc: 'Webhook listener that turns patron submissions into a live queue, removing 90% of manual entries.', cta: 'How it works', tilt: '1deg' },
+    ].map((p, i) => ({ ...p, delay: d(i) }));
+    const awardYears = [
+      { year: '2021', items: [['Malaysian Computing Challenge','Gold Award'],['INTI e-workshop Programming Maze Challenge','1st Prize'],['INTI e-workshop EDA Circuit Design','3rd Prize']] },
+      { year: '2020', items: [['International Astronomy and Astrophysics Competition','Finalist, Bronze'],['CEC Young Engineers 100 Day Makerthon','Silver, Best Advertisement'],['English Online Interclass Debate 2020','2nd Prize']] },
+      { year: '2019', items: [['The First International Youth UAV Science Camp and Competition','1st Prize'],['IET Faraday Challenge Malaysia','2nd Prize'],['IET Faraday Challenge Penang','2nd Prize'],['UBTECH Robotics Competition Smart Factory','2nd Prize'],['State Award for Excellence in Extra Curricular Activities','Gold Award'],['STEAM Science Fair','Merit Prize'],["School's Club Performance Award",'Gold Award'],["School's Club Performance Report",'Best Slides Design']] },
+      { year: '2017', items: [['MISCC Robotic Workshop and Competition 2017','Excellence Award'],['Choral Speaking Competition','Excellence Award'],['13th Annual Interclass Performing Arts Competition','Silver Award']] },
+      { year: '2016', items: [['The Second ASEAN Student Science Project Competition (ASPC 2016)','1st Prize'],['ACCCIM STI Competition','1st Prize'],['Tan Kah Kee Young Inventors 2016','Overall Champion'],['12th Annual Interclass Performing Arts Competition','Silver Award'],['Annual Hill Climbing Competition','20th Place']] },
+    ].map((y, i) => ({ ...y, delay: d(i), items: y.items.map(([name, prize]) => ({ name, prize })) }));
+    const writing = [
+      { meta: '2026 · IEEE SMC (submitted)', title: 'Network structure and the persistence of economic inequality: Evidence from agent-based exchange models', sub: 'Shields, L., Yong, G., Moreno, E., Dawadi, N., Nye, J., & Goodrich, M. A.', delay: d(0) },
+      { meta: '2026 · BYU SRC', title: 'Effects of Gratitude: Reciprocity in Networks and the Dynamics of Inequality', sub: 'Yong, G. Presentation at the BYU Student Research Conference.', delay: d(1) },
+    ];
+    const [a, b, c] = this.intro, n = this.state.typed;
+    const typedBefore = a.slice(0, n), typedBold = b.slice(0, Math.max(0, n - a.length)), typedAfter = c.slice(0, Math.max(0, n - a.length - b.length));
+    return {
+      typedBefore, typedBold, typedAfter, cursorOpacity: this.state.typingDone ? 0 : 1, loading: this.state.loading, loaderOpacity: this.state.fading ? 0 : 1, entered: !this.state.loading,
+      sceneMask: (() => { const P = this.props, D = theme === 'dark'; const g = (k, dflt) => (D ? P[k + 'Dark'] : P[k]) ?? dflt; const w = g('fadeWidth', 78), ht = g('fadeHeight', 58), f = g('fadeFeather', 60), y = g('fadeY', 55);
+        // anchor X to the centred 1180px content column so the fade tracks the hero text at any width
+        const x = `var(--fade-x, calc(max(0px, (100% - 1180px) / 2) + ${g('fadeX', 0)}%))`; const solid = Math.max(0, 100 - f); const k = g('fadeDrop', 50) / 100; const mid = solid + (100 - solid) * k; const cf = g('centerFeather', 0) / 100; const cd = g('centerDrop', 50) / 100; const c0 = solid * (1 - cf); const cmid = c0 + (solid - c0) * cd; const ca = (0.35 * cf * (1 - cd)).toFixed(2); return `radial-gradient(ellipse var(--fade-w, ${w}%) var(--fade-h, ${ht}%) at ${x} var(--fade-y, ${y}%), transparent 0%, transparent ${c0}%, rgba(0,0,0,${ca}) ${cmid}%, rgba(0,0,0,${(0.35 * cf).toFixed(2)}) ${solid}%, rgba(0,0,0,${(0.7 * (1 - k) + 0.15).toFixed(2)}) ${mid}%, black 100%),linear-gradient(180deg, black 0%, black 70%, transparent 100%)`; })(),
+      theme, isDark: theme === 'dark', isLight: theme !== 'dark',
+      navClass: this.state.menu ? 'gy-nav gy-open' : 'gy-nav', menuOpen: this.state.menu, menuClosed: !this.state.menu, toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      show3d: this.props.show3d ?? true, showScene: (this.props.show3d ?? true) && page === 'home', sceneDark: theme === 'dark' ? '1' : '0', sceneColor: theme === 'dark' ? '#4c6390' : '#b7c6df',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      goHome: this.go('home'),
+      navItems: pages.map(([id, label]) => ({ label, go: this.go(id), active: page === id ? '1' : '0', underline: page === id ? 'calc(100% - 24px)' : '0%' })),
+      isHome: page === 'home', isHomeReady: page === 'home' && !this.state.loading, isExp: page === 'exp', isEdu: page === 'edu', isProj: page === 'proj', isAwards: page === 'awards', isWriting: page === 'writing',
+      letters: 'Gent Yong'.split('').map((ch, i) => { const d = (this.state.dodge || [])[i]; return { ch, transform: d ? `translate(${d[0]}px, ${d[1]}px) rotate(${d[2]}deg)` : 'none' }; }),
+      nameRef: this.nameRef || (this.nameRef = React.createRef()),
+      onNameMove: (e) => {
+        const el = this.nameRef && this.nameRef.current; if (!el) return;
+        const R = 90, F = 34, out = [];
+        [...el.children].forEach((sp, i) => {
+          const b = sp.getBoundingClientRect(); const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+          const dx = cx - e.clientX, dy = cy - e.clientY, dist = Math.hypot(dx, dy);
+          if (dist < R && dist > 0.01) { const k = (1 - dist / R); const f = F * k * k; out[i] = [Math.round(dx / dist * f), Math.round(dy / dist * f), Math.round(dx / dist * 6 * k)]; }
+        });
+        this.setState({ dodge: out });
+      },
+      onNameLeave: () => this.setState({ dodge: [] }),
+      doors: [
+        { index: '01', count: '5 roles', label: 'Work', sub: 'Research at BYU, an AWS event pipeline at Partner.Co, and more.', go: this.go('exp'), tilt: '-1deg' },
+        { index: '02', count: '4 projects', label: 'Built', sub: 'From a serverless ChatGPT wrapper to a DQN that rewires networks.', go: this.go('proj'), tilt: '1deg' },
+        { index: '03', count: '22 awards', label: 'Won', sub: 'ASEAN science fairs to the Malaysian Computing Challenge, 2016–2021.', go: this.go('awards'), tilt: '-1deg' },
+      ],
+      jobs, projects, awardYears, writing,
+      courses: ['Reinforcement Learning','Algorithm Design & Analysis','Software Design','Advanced Software Construction','Systems Programming','Web Programming','Machine Learning','Computational Theory','Multivariable Calculus'],
+    };
+  }
+}
+</script>
+</body>
+</html>

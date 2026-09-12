@@ -8,6 +8,7 @@ export default function Header({ toggleTheme }) {
   const [menu, setMenu] = useState(false)
   return (
     <header className="header">
+      <div className="header-inner">
       <Link href="/">
         <a className="logo">
           <span className="logo-dot" />
@@ -45,6 +46,7 @@ export default function Header({ toggleTheme }) {
             {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
           </svg>
         </button>
+      </div>
       </div>
     </header>
   )

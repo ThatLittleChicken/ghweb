@@ -27,7 +27,7 @@ export default function Header({ toggleTheme }) {
         ))}
       </nav>
       <div className="header-right">
-        <a className="resume-btn" href="https://drive.google.com/file/d/1-lyh1Ut4VZl_sBH1CvkTIE7ngcoPfIxg" target="_blank" rel="noreferrer">
+        <a className="resume-btn" data-track="resume" href="https://drive.google.com/file/d/1-lyh1Ut4VZl_sBH1CvkTIE7ngcoPfIxg" target="_blank" rel="noreferrer">
           <span className="resume-label">Resume.pdf</span>
           <span>↓</span>
         </a>

@@ -1,8 +1,9 @@
 import '../styles/globals.css'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
-import initFirebase from '../config/firebase'
+import initFirebase, { logEvent } from '../config/firebase'
 
 initFirebase()
 
@@ -10,6 +11,41 @@ export default function MyApp({ Component, pageProps }) {
   const [theme, setTheme] = useState('light')
   const [loading, setLoading] = useState(true)
   const [fading, setFading] = useState(false)
+  const router = useRouter()
+
+  // analytics: page_view on every client-side navigation (the initial load
+  // is logged automatically by gtag's config call)
+  useEffect(() => {
+    const onRoute = (url) => {
+      logEvent('page_view', {
+        page_path: url,
+        page_location: window.location.origin + url,
+      })
+    }
+    router.events.on('routeChangeComplete', onRoute)
+    return () => router.events.off('routeChangeComplete', onRoute)
+  }, [router])
+
+  // analytics: one delegated listener logs every link/button click with a
+  // readable label (data-track wins, then aria-label, then visible text)
+  useEffect(() => {
+    const onClick = (e) => {
+      const el = e.target && e.target.closest && e.target.closest('a, button')
+      if (!el) return
+      const params = {
+        label:
+          el.dataset.track ||
+          el.getAttribute('aria-label') ||
+          (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 60),
+        page_path: window.location.pathname,
+      }
+      const href = el.getAttribute('href')
+      if (href) params.href = href
+      logEvent('ui_click', params)
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
+  }, [])
 
   // theme is set on <html> before paint by the inline script in _document
   // (stored choice, else system preference); sync React state to it, and

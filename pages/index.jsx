@@ -234,7 +234,7 @@ export default function Home({ loaderDone }) {
       <div className="doors">
         {DOORS.map((d) => (
           <Link href={d.href} key={d.label}>
-            <a className="door">
+            <a className="door" data-track={`door:${d.label}`}>
               <div className="door-meta">
                 <span>{d.index}</span>
                 <span>{d.count}</span>

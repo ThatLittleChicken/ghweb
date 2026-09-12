@@ -14,6 +14,15 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENTID || 'G-C5F0JVFGW4',
 };
 
+// best-effort custom event logging; never throws
+export function logEvent(name, params) {
+  try {
+    if (typeof window !== 'undefined' && firebase.apps.length) {
+      firebase.analytics().logEvent(name, params);
+    }
+  } catch (e) { /* analytics blocked or unavailable */ }
+}
+
 export default function initFirebase() {
   if (firebase.apps.length || !firebaseConfig.projectId) return;
   try {

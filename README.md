@@ -7,7 +7,7 @@ Personal site of Gent Yong: [gentyo.ng](https://gentyo.ng).
 Six pages — **Home · Education · Experience · Projects · Awards · Interests**
 ## Stack
 
-- Next.js 12 (pages router), React 17 — static export (`next export`)
+- Next.js 12 (pages router), React 17, TypeScript — static export (`next export`)
 - three.js 0.184 — `<office-scene>` web component in `lib/office-scene.js`, client-side only
 - CSS design system in `styles/globals.css` (tokens, keyframes, responsive breakpoints at 1020px/860px)
 - Firebase Hosting (`ghweb-f209d`), analytics optional via `NEXT_PUBLIC_FIREBASE_*` env vars
@@ -22,7 +22,7 @@ npm run build    # production build + static export to out/
 
 ## Editing content
 
-All copy lives in [`data/content.js`](data/content.js) — intro, nav, door cards, jobs, projects, awards, papers, coursework, skills, footer links.
+All copy lives in [`data/content.ts`](data/content.ts) — intro, nav, door cards, jobs, projects, awards, papers, coursework, skills, footer links.
 
 - **Interests photos**: images in `public/photos/` and list in `INTEREST_PHOTOS`; `INTERESTS` chips render below the album when non-empty.
 - **Resume**: links to Google Drive in `components/Header.jsx`.

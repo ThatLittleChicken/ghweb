@@ -1,5 +1,5 @@
 // Full-screen "hello there" handwriting loader shown on first paint.
-export default function Loader({ fading }) {
+export default function Loader({ fading }: { fading: boolean }) {
   return (
     <div className="loader" style={{ opacity: fading ? 0 : 1 }}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 170" aria-label="hello there">

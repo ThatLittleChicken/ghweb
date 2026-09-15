@@ -15,7 +15,7 @@ const firebaseConfig = {
 };
 
 // best-effort custom event logging; never throws
-export function logEvent(name, params) {
+export function logEvent(name: string, params?: Record<string, unknown>) {
   try {
     if (typeof window !== 'undefined' && firebase.apps.length) {
       firebase.analytics().logEvent(name, params);
@@ -23,7 +23,7 @@ export function logEvent(name, params) {
   } catch (e) { /* analytics blocked or unavailable */ }
 }
 
-export default function initFirebase() {
+export default function initFirebase(): void {
   if (firebase.apps.length || !firebaseConfig.projectId) return;
   try {
     firebase.initializeApp(firebaseConfig);

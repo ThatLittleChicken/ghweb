@@ -1,12 +1,51 @@
 // All site content, verbatim from the resume / design handoff.
 
-export const INTRO = [
+export interface Door {
+  index: string;
+  count: string;
+  label: string;
+  sub: string;
+  href: string;
+}
+
+export interface Job {
+  when: string;
+  title: string;
+  org: string;
+  points: string[];
+}
+
+export interface Project {
+  title: string;
+  tags: string[];
+  desc: string;
+}
+
+export interface AwardYear {
+  year: string;
+  items: [name: string, prize: string][];
+}
+
+export interface Writing {
+  meta: string;
+  title: string;
+  sub: string;
+}
+
+export interface Photo {
+  src: string;
+  caption: string;
+}
+
+export type LabeledLink = [label: string, href: string];
+
+export const INTRO: [string, string, string] = [
   "Computer Science senior @ Brigham Young University. Graduating ",
   "Dec 2026",
   ", looking for SWE roles and grad school.",
 ];
 
-export const NAV = [
+export const NAV: LabeledLink[] = [
   ["/", "Home"],
   ["/education", "Education"],
   ["/experience", "Experience"],
@@ -15,7 +54,7 @@ export const NAV = [
   ["/interests", "Interests"],
 ];
 
-export const DOORS = [
+export const DOORS: Door[] = [
   {
     index: "01",
     count: "5 roles",
@@ -39,7 +78,7 @@ export const DOORS = [
   },
 ];
 
-export const FOOT_LINKS = [
+export const FOOT_LINKS: LabeledLink[] = [
   ["yonggh@byu.edu", "mailto:yonggh@byu.edu"],
   ["github", "https://github.com/thatlittlechicken"],
   ["linkedin", "https://www.linkedin.com/in/gentyong/"],
@@ -47,7 +86,7 @@ export const FOOT_LINKS = [
   ["spotify", "https://open.spotify.com/user/22kf3sv5ir57t7v7jf3qm3upy"],
 ];
 
-export const JOBS = [
+export const JOBS: Job[] = [
   {
     when: "Aug 2026 – present / Feb 2025 – Apr 2026",
     title: "Undergraduate Researcher",
@@ -64,6 +103,15 @@ export const JOBS = [
     points: [
       "End-to-end event pipeline spanning event definition, database emission, API Gateway, EventBridge, SQS and Lambda, with DynamoDB idempotency handling and DLQs.",
       "Contributed to a Quarkus tracing extension that injects trace context into events, enabling annotation-driven end-to-end CloudWatch tracing.",
+    ],
+  },
+  {
+    when: "Jan 2025",
+    title: "Co-Founder",
+    org: "ZAC Technologies · Petaling Jaya, MY",
+    points: [
+      "Co-founded a consulting and software company built to make advanced data intelligence practical for business, employing several employees.",
+      "Built up early stage services and tools, and led the technical development of the company's software products and services."
     ],
   },
   {
@@ -95,7 +143,7 @@ export const JOBS = [
   }
 ];
 
-export const PROJECTS = [
+export const PROJECTS: Project[] = [
   {
     title: "ChatGPT Wrapper",
     tags: ["TypeScript", "Next.js", "OpenAI API", "AWS", "Tailwind", "SST"],
@@ -118,7 +166,7 @@ export const PROJECTS = [
   }
 ];
 
-export const AWARD_YEARS = [
+export const AWARD_YEARS: AwardYear[] = [
   {
     year: "2021",
     items: [
@@ -180,7 +228,7 @@ export const AWARD_YEARS = [
   },
 ];
 
-export const WRITING = [
+export const WRITING: Writing[] = [
   {
     meta: "2026 · IEEE SMC (submitted)",
     title:
@@ -213,7 +261,7 @@ export const TECHNOLOGIES =
   "Agentic Tooling, Node.js, React, Next.js, Express, AWS, MySQL, MongoDB, Supabase, REST API, Git, CI/CD, Sklearn, PyTorch, NumPy, Pandas, NetworkX";
 
 // photo stack on /interests — drop images in public/photos/ and list them here
-export const INTEREST_PHOTOS = [
+export const INTEREST_PHOTOS: Photo[] = [
   { src: "/photos/hike.jpg", caption: "Love the view after a good hike" },
   { src: "/photos/climb.jpg", caption: "Always exciting and fun to climb" },
   { src: "/photos/snow.jpg", caption: "Snowboarding in the winter, hoping for powder" },
@@ -222,7 +270,7 @@ export const INTEREST_PHOTOS = [
 ];
 
 // personal interests shown as chips on /interests — fill these in
-export const INTERESTS = [];
+export const INTERESTS: string[] = [];
 
 // stagger delay for row entrances
-export const stagger = (i) => `${0.15 + i * 0.08}s`;
+export const stagger = (i: number): string => `${0.15 + i * 0.08}s`;

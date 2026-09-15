@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
@@ -7,8 +8,8 @@ import initFirebase, { logEvent } from '../config/firebase'
 
 initFirebase()
 
-export default function MyApp({ Component, pageProps }) {
-  const [theme, setTheme] = useState('light')
+export default function MyApp({ Component, pageProps }: AppProps) {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [loading, setLoading] = useState(true)
   const [fading, setFading] = useState(false)
   const router = useRouter()
@@ -16,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
   // analytics: page_view on every client-side navigation (the initial load
   // is logged automatically by gtag's config call)
   useEffect(() => {
-    const onRoute = (url) => {
+    const onRoute = (url: string) => {
       logEvent('page_view', {
         page_path: url,
         page_location: window.location.origin + url,
@@ -29,10 +30,11 @@ export default function MyApp({ Component, pageProps }) {
   // analytics: one delegated listener logs every link/button click with a
   // readable label (data-track wins, then aria-label, then visible text)
   useEffect(() => {
-    const onClick = (e) => {
-      const el = e.target && e.target.closest && e.target.closest('a, button')
+    const onClick = (e: MouseEvent) => {
+      const target = e.target instanceof Element ? e.target : null
+      const el = target && target.closest<HTMLElement>('a, button')
       if (!el) return
-      const params = {
+      const params: Record<string, unknown> = {
         label:
           el.dataset.track ||
           el.getAttribute('aria-label') ||
@@ -53,7 +55,7 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (document.documentElement.getAttribute('data-theme') === 'dark') setTheme('dark')
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const onChange = (e) => {
+    const onChange = (e: MediaQueryListEvent) => {
       let stored = null
       try { stored = localStorage.getItem('theme') } catch (err) { /* private mode */ }
       if (stored === 'dark' || stored === 'light') return
@@ -82,7 +84,7 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const t0 = performance.now()
     const needsScene = window.location.pathname.replace(/\/$/, '') === ''
-    let timer
+    let timer: ReturnType<typeof setTimeout>
     let fontsReady = !(document.fonts && document.fonts.ready)
     if (!fontsReady) document.fonts.ready.then(() => { fontsReady = true })
     const ready = () =>

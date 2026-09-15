@@ -4,6 +4,19 @@ import { useEffect, useRef } from "react";
 import { INTRO, DOORS, FOOT_LINKS } from "../data/content";
 import Seo from "../components/Seo";
 
+interface TypeStep {
+  s: string;
+  d: number;
+}
+
+interface DodgeState {
+  base: [number, number][];
+  cur: [number, number, number][];
+  mx: number;
+  my: number;
+  raf: number;
+}
+
 // structured data for search engines
 const PERSON = {
   "@context": "https://schema.org",
@@ -30,7 +43,7 @@ const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // QWERTY neighbours for plausible typos
-const NEIGHBOURS = {
+const NEIGHBOURS: Record<string, string> = {
   a: "sq", b: "vn", c: "xv", d: "sf", e: "wr", f: "dg", g: "fh", h: "gj",
   i: "uo", j: "hk", k: "jl", l: "k", m: "n", n: "bm", o: "ip", p: "o",
   q: "wa", r: "et", s: "ad", t: "ry", u: "yi", v: "cb", w: "qe", x: "zc",
@@ -41,10 +54,10 @@ const NEIGHBOURS = {
 // pauses at word boundaries and after punctuation, micro-hesitations, and
 // the occasional typo that gets noticed and backspaced. Returns a playback
 // plan of { s: string to show, d: ms before the next step }.
-function planTyping(full) {
+function planTyping(full: string): TypeStep[] {
   const rnd = Math.random;
   const bell = () => (rnd() + rnd() + rnd()) / 3;
-  const plan = [];
+  const plan: TypeStep[] = [];
   let out = "";
   let tempo = 1;
   let typos = 0;
@@ -71,13 +84,13 @@ function planTyping(full) {
   return plan;
 }
 
-export default function Home({ loaderDone }) {
-  const nameRef = useRef(null);
-  const beforeRef = useRef(null);
-  const boldRef = useRef(null);
-  const afterRef = useRef(null);
-  const caretRef = useRef(null);
-  const dodge = useRef(null);
+export default function Home({ loaderDone }: { loaderDone?: boolean }) {
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const beforeRef = useRef<HTMLSpanElement>(null);
+  const boldRef = useRef<HTMLElement>(null);
+  const afterRef = useRef<HTMLSpanElement>(null);
+  const caretRef = useRef<HTMLSpanElement>(null);
+  const dodge = useRef<DodgeState | null>(null);
 
   // typewriter: plays the planned keystrokes straight into the DOM; caret is
   // solid while typing and resumes blinking when the typist "pauses"
@@ -86,21 +99,21 @@ export default function Home({ loaderDone }) {
     const delay = visited ? 1000 : 200;
     visited = true;
     const [a, b] = INTRO;
-    const show = (s) => {
-      if (!beforeRef.current) return;
+    const show = (s: string) => {
+      if (!beforeRef.current || !boldRef.current || !afterRef.current) return;
       beforeRef.current.textContent = s.slice(0, a.length);
       boldRef.current.textContent = s.slice(a.length, a.length + b.length);
       afterRef.current.textContent = s.slice(a.length + b.length);
     };
     if (reducedMotion()) {
       show(FULL);
-      if (caretRef.current) caretRef.current.style.opacity = 0;
+      if (caretRef.current) caretRef.current.style.opacity = "0";
       return undefined;
     }
     const plan = planTyping(FULL);
     let idx = 0;
-    let timer;
-    let idleTimer;
+    let timer: ReturnType<typeof setTimeout>;
+    let idleTimer: ReturnType<typeof setTimeout>;
     const play = () => {
       const step = plan[idx];
       idx += 1;
@@ -108,12 +121,12 @@ export default function Home({ loaderDone }) {
       const caret = caretRef.current;
       if (caret) {
         if (idx >= plan.length) {
-          caret.style.opacity = 0;
+          caret.style.opacity = "0";
           return;
         }
         // solid caret while keys are landing, blink again when idle
         caret.style.animation = "none";
-        caret.style.opacity = 1;
+        caret.style.opacity = "1";
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => { caret.style.animation = ""; }, 420);
       }
@@ -133,7 +146,7 @@ export default function Home({ loaderDone }) {
   // when the loop wakes (and on scroll/resize), never from moved letters.
   useEffect(() => {
     if (reducedMotion()) return undefined;
-    const st = { base: [], cur: [], mx: -1e4, my: -1e4, raf: 0 };
+    const st: DodgeState = { base: [], cur: [], mx: -1e4, my: -1e4, raf: 0 };
     dodge.current = st;
 
     const measure = () => {
@@ -152,7 +165,7 @@ export default function Home({ loaderDone }) {
       const el = nameRef.current;
       if (!el) { st.raf = 0; return; }
       let moving = false;
-      Array.from(el.children).forEach((sp, i) => {
+      Array.from(el.children as HTMLCollectionOf<HTMLElement>).forEach((sp, i) => {
         const [bx, by] = st.base[i] || [0, 0];
         let tx = 0;
         let ty = 0;
@@ -175,10 +188,10 @@ export default function Home({ loaderDone }) {
         sp.style.transform = `translate(${c[0].toFixed(2)}px, ${c[1].toFixed(2)}px) rotate(${c[2].toFixed(2)}deg)`;
       });
       st.raf = moving ? requestAnimationFrame(settle) : 0;
-      if (!moving) Array.from(el.children).forEach((sp) => { sp.style.transform = "none"; });
+      if (!moving) Array.from(el.children as HTMLCollectionOf<HTMLElement>).forEach((sp) => { sp.style.transform = "none"; });
     };
 
-    const onMove = (e) => {
+    const onMove = (e: PointerEvent) => {
       st.mx = e.clientX;
       st.my = e.clientY;
       if (!st.raf) {

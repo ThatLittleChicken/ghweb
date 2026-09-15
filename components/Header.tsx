@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { NAV } from '../data/content'
 
-export default function Header({ toggleTheme }) {
+export default function Header({ toggleTheme }: { toggleTheme: () => void }) {
   const router = useRouter()
   const [menu, setMenu] = useState(false)
   return (

@@ -3,8 +3,14 @@ import Head from 'next/head'
 const SITE = 'https://gentyo.ng'
 const OG_IMAGE = `${SITE}/Screenshot.png`
 
+interface SeoProps {
+  title: string
+  description: string
+  path: string
+}
+
 // Per-page SEO tags: title, description, canonical, Open Graph, Twitter card.
-export default function Seo({ title, description, path }) {
+export default function Seo({ title, description, path }: SeoProps) {
   const url = `${SITE}${path}`
   return (
     <Head>

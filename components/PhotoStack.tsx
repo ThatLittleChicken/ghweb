@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import type { Photo } from "../data/content";
 
 const TILTS = [-3, 2.5, -1.5, 4, -4.5, 1.5, -2.5, 3.5];
 
 // A pile of tilted photo cards; clicking sends the top one to the back.
-export default function PhotoStack({ photos }) {
+export default function PhotoStack({ photos }: { photos: Photo[] }) {
   const [top, setTop] = useState(0);
   const [leaving, setLeaving] = useState(false);
-  const timer = useRef();
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   const n = photos.length;
 
   useEffect(() => () => clearTimeout(timer.current), []);

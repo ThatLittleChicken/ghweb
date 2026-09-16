@@ -54,30 +54,6 @@ export const NAV: LabeledLink[] = [
   ["/interests", "Interests"],
 ];
 
-export const DOORS: Door[] = [
-  {
-    index: "01",
-    count: "5 roles",
-    label: "Work",
-    sub: "Research at BYU, an AWS event pipeline at Partner.Co, and more.",
-    href: "/experience",
-  },
-  {
-    index: "02",
-    count: "5 honors",
-    label: "Education",
-    sub: "Degree in Computer Science, Math minor at Brigham Young University",
-    href: "/education",
-  },
-  {
-    index: "03",
-    count: "6 items",
-    label: "Projects",
-    sub: "From a ChatGPT wrapper to investigating network inequality.",
-    href: "/projects",
-  },
-];
-
 export const FOOT_LINKS: LabeledLink[] = [
   ["yonggh@byu.edu", "mailto:yonggh@byu.edu"],
   ["github", "https://github.com/thatlittlechicken"],
@@ -240,6 +216,30 @@ export const WRITING: Writing[] = [
     title:
       "Effects of Gratitude: Reciprocity in Networks and the Dynamics of Inequality",
     sub: "Yong, G. Presentation at the BYU Student Research Conference.",
+  },
+];
+
+export const DOORS: Door[] = [
+  {
+    index: "01",
+    count: `${JOBS.length} roles`,
+    label: "Work",
+    sub: "Research at BYU, an AWS event pipeline at Partner.Co, and more.",
+    href: "/experience",
+  },
+  {
+    index: "02",
+    count: "5 honors",
+    label: "Education",
+    sub: "Degree in Computer Science, Math minor at Brigham Young University",
+    href: "/education",
+  },
+  {
+    index: "03",
+    count: `${PROJECTS.length} items`,
+    label: "Projects",
+    sub: "From a ChatGPT wrapper to investigating network inequality.",
+    href: "/projects",
   },
 ];
 

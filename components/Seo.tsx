@@ -9,14 +9,17 @@ interface SeoProps {
   path: string
 }
 
-// Per-page SEO tags: title, description, canonical, Open Graph, Twitter card.
+// Per-page head tags. The site is deliberately kept out of search results:
+// noindex is served here and as an X-Robots-Tag header (see firebase.json).
+// Open Graph/Twitter tags stay so shared links still preview properly.
 export default function Seo({ title, description, path }: SeoProps) {
   const url = `${SITE}${path}`
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={url} />
+      <meta name="robots" content="noindex, nofollow" />
+      <meta name="googlebot" content="noindex, nofollow" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Gent Yong" />
       <meta property="og:title" content={title} />

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { INTRO, DOORS, FOOT_LINKS } from "../data/content";
@@ -16,21 +15,6 @@ interface DodgeState {
   my: number;
   raf: number;
 }
-
-// structured data for search engines
-const PERSON = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Gent Yong",
-  url: "https://gentyo.ng",
-  jobTitle: "Undergraduate Researcher",
-  affiliation: { "@type": "CollegeOrUniversity", name: "Brigham Young University" },
-  email: "mailto:yonggh@byu.edu",
-  sameAs: [
-    "https://github.com/thatlittlechicken",
-    "https://www.linkedin.com/in/gentyong/",
-  ],
-};
 
 const FULL = INTRO.join("");
 
@@ -218,9 +202,6 @@ export default function Home({ loaderDone }: { loaderDone?: boolean }) {
         description="Personal website of Gent Yong, undergraduate researcher studying Computer Science at Brigham Young University."
         path="/"
       />
-      <Head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON) }} />
-      </Head>
       <div className="hero">
         <div className="hero-col">
           <h1 className="name" ref={nameRef}>

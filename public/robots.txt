@@ -32,8 +32,8 @@ Disallow: /
 User-agent: meta-externalagent
 Disallow: /
 
-# search engines and everyone else: yes
+# Everyone else: crawling is allowed on purpose so crawlers can see the
+# noindex meta tag / X-Robots-Tag header and keep the site out of results.
+# (A blanket Disallow would hide that signal and the URL could still be listed.)
 User-agent: *
 Allow: /
-
-Sitemap: https://gentyo.ng/sitemap.xml

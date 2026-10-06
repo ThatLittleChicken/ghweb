@@ -79,7 +79,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }
 
   // loader: dismiss only once everything that renders is actually ready —
-  // document loaded, web fonts active, and (on home) the office scene has
+  // document loaded, web fonts active, and (on home) the city scene has
   // drawn its first frame — minimum 1.2s, maximum 6s on screen
   useEffect(() => {
     const t0 = performance.now()
@@ -90,7 +90,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const ready = () =>
       document.readyState === 'complete' &&
       fontsReady &&
-      (!needsScene || document.querySelector('office-scene[data-rendered]'))
+      (!needsScene || document.querySelector('city-scene[data-rendered]'))
     const done = () => {
       const wait = Math.max(0, 1200 - (performance.now() - t0))
       timer = setTimeout(() => {

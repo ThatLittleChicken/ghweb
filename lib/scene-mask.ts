@@ -1,7 +1,7 @@
 // Mask over the 3D city scene: a radial clear zone behind the hero text
 // (X anchored to the centred 1180px content column) intersected with a
 // vertical fade. Parameter sets per theme, from the design handoff.
-const LIGHT = { fadeWidth: 75, fadeHeight: 50, fadeX: 18, fadeY: 57, centerFeather: 62, centerDrop: 58, fadeFeather: 57, fadeDrop: 46 }
+const LIGHT = { fadeWidth: 58, fadeHeight: 50, fadeX: 18, fadeY: 57, centerFeather: 62, centerDrop: 58, fadeFeather: 57, fadeDrop: 30 }
 const DARK = { ...LIGHT }
 
 export function sceneMask(dark: boolean): string {

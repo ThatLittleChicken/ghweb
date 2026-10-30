@@ -8,7 +8,7 @@ Six pages — **Home · Education · Experience · Projects · Awards · Interes
 ## Stack
 
 - Next.js 12 (pages router), React 17, TypeScript — static export (`next export`)
-- three.js 0.184 — `<city-scene>` web component in `lib/city-scene.js`, client-side only (see below)
+- three.js 0.184 — `<office-scene>` web component in `lib/office-scene.js`, client-side only (see below)
 - CSS design system in `styles/globals.css` (tokens, keyframes, responsive breakpoints at 1020px/860px)
 - Firebase Hosting (`ghweb-f209d`), analytics optional via `NEXT_PUBLIC_FIREBASE_*` env vars
 
@@ -35,18 +35,13 @@ Pushing to `main` builds and deploys to live via GitHub Actions
 
 ## Home background scene
 
-`lib/city-scene.js` renders a procedural downtown in Utah Valley, seen from a ~240 m vantage on the west side with the Wasatch Front behind it. Nothing is modelled or downloaded; everything is generated on load.
+`lib/office-scene.js` renders a home office seen from inside the room: a desk beside a steel-framed window that looks out to the Wasatch Range, an office chair, a bookshelf and a floor lamp. Nothing is modelled or downloaded; geometry, textures and the monitor's screen are generated on load. `components/OfficeScene.tsx` mounts it as the `<office-scene>` web component.
 
-- **Terrain**: one fragment pass writes a float heightmap (fault-scarp landform + ridged multifractal + a downhill erosion filter). Two more passes bake normals, soft sun and moon shadows, horizon AO and curvature. Bakes run once, in strips, so they don't stall weaker GPUs.
-- **City**: blocks on a 160 m grid with arterials every fifth street and a freeway across the mid-ground. Downtown cores get towers (setback tiers, slabs, paired wings, a few landmarks), then perimeter mid-rise blocks, then houses under tree canopy. All buildings are one instanced box; facades, windows, curtain-wall reflections and night interiors are shaded per pixel, with window detail falling back to suites and floor groups at distance so it doesn't shimmer.
-- **Light**: a one-off orthographic depth render of the buildings gives sun shadows across streets and neighbouring towers. Sky, clouds, stars and moon are a dome shader; height fog, aerial perspective and the city's own glow in the haze tie it together.
-- **Bustle**: ~20k cars move along the streets and freeway (boxes by day, head- and tail-light streams at night), plus street lamps, red beacons on tall towers, aircraft on approach, and windows that switch on through dusk and occasionally change.
-- **Theme**: the `dark` attribute animates one `uNight` uniform over ~2.4s, so switching theme plays dusk (alpenglow on the range, then the city lighting up) or dawn.
-- **Budget**: 30fps cap, pauses when hidden or scrolled away, drops render resolution if frames run slow, lighter terrain, fewer buildings and cars, and a smaller shadow map on phones; honours `prefers-reduced-motion` (traffic and clouds hold still).
+- **Camera**: eye level with vertical lines kept straight (a level camera plus lens shift through `setViewOffset`), framed so the desk sits right of the hero text. Slow drift and pointer parallax. Phones get their own framing.
+- **Light theme**: low afternoon sun through the window, shadow-mapped so the window grid falls across the wall; sky light from the window and warm floor bounce as rect area lights; an environment probe rendered from inside the room.
+- **Dark theme**: the desk lamp (shadowed spot), the monitor and the window as area lights, a dim floor lamp, moonlight and a cool ambient fill. The `dark` attribute cross-fades the two rigs over ~2.4 s, passing through a short golden-hour light.
+- **Detail**: the monitor shows research code that scrolls like someone reading it (its own texture layer, so scrolling costs no redraws) beside a network that rewires itself; steam over the coffee, dust in the sunbeam, a wall clock on the visitor's local time.
+- **Post**: GTAO ambient occlusion, bloom, AgX tone mapping, SMAA, grain and vignette.
+- **Budget**: 30 fps cap; pauses when the tab is hidden or the scene is scrolled away; shadow maps render once; static meshes are merged per material (about 105–130 draw calls per frame including post-processing). Render resolution steps down if frames run slow. Phones and machines with 4 or fewer cores get half-size textures and shadow maps, half-resolution AO and no bloom. Honours `prefers-reduced-motion` (camera drift, curtain, dust and code scrolling hold still).
 
-Composition knobs are the constants at the top of the file: `CAM`/`AIM` (viewpoint), `SUN`/`MOON` (light, and where the moon sits in frame), `CORES` (where the towers cluster and how tall), `FWY_J` (which street line is the freeway).
-
-## Design reference
-
-Redesign implemented from handoff in
-[`design_handoff_gentyo_site/`](design_handoff_gentyo_site/) (README + prototype HTML + scene source), kept in the repo for reference.
+Composition knobs are the constants at the top of the file: `FRAMINGS` (camera), `SUN` (sun direction), `WIN` and `DESK` (layout); light levels per theme are in `RIG` inside `createApp`.

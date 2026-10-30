@@ -16,5 +16,5 @@
     "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "design_handoff_gentyo_site", "out", ".next"]
+  "exclude": ["node_modules", "out", ".next"]
 }

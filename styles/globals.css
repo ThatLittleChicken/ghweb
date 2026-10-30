@@ -1,4 +1,4 @@
-/* Design tokens — see design_handoff_gentyo_site/README.md */
+/* Design tokens */
 :root,
 [data-theme="light"] {
   --bg: #f5f5f3;
@@ -17,7 +17,7 @@
   --line: #26292d;
   --acc: oklch(0.75 0.09 250);
   --card: rgba(20, 22, 26, 0.7);
-  --blob1: oklch(0.28 0.03 250);
+  --blob1: #000;
   --blob2: oklch(0.26 0.02 90);
 }
 
@@ -57,7 +57,7 @@ button { font-family: inherit }
 .bg-deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden }
 .blob1 { position: absolute; top: -20vh; left: -10vw; width: 60vw; height: 60vw; border-radius: 50%; background: var(--blob1); filter: blur(90px); opacity: 0.75; animation: drift1 26s ease-in-out infinite; will-change: transform }
 .blob2 { position: absolute; bottom: -25vh; right: -10vw; width: 55vw; height: 55vw; border-radius: 50%; background: var(--blob2); filter: blur(100px); opacity: 0.7; animation: drift2 32s ease-in-out infinite; will-change: transform }
-[data-theme="dark"] .blob1 { opacity: 0.25 }
+[data-theme="dark"] .blob1 { opacity: 1 } /* black blob behind the hero; at 0.25 it reads as the grey page */
 [data-theme="dark"] .blob2 { opacity: 0.2 }
 .dots { position: absolute; inset: 0; background-image: radial-gradient(var(--line) 1px, transparent 1px); background-size: 28px 28px; opacity: 0.55; -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%); mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%) }
 .scene-wrap { position: absolute; top: 0; left: 0; right: 0; height: min(100vh, 900px); animation: sceneIn 2.4s 0.3s ease-out both }

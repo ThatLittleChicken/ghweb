@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Header from './Header'
 import { sceneMask } from '../lib/scene-mask'
 
-const CityScene = dynamic(() => import('./CityScene'), { ssr: false })
+const OfficeScene = dynamic(() => import('./OfficeScene'), { ssr: false })
 
 interface LayoutProps {
   theme: 'light' | 'dark'
@@ -33,7 +33,7 @@ export default function Layout({ theme, toggleTheme, holding, children }: Layout
               WebkitMaskComposite: 'source-in',
             }}
           >
-            <CityScene dark={theme === 'dark'} />
+            <OfficeScene dark={theme === 'dark'} />
           </div>
         )}
       </div>
